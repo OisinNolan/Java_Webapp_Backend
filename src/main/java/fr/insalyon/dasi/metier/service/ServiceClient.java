@@ -11,7 +11,7 @@ import java.util.logging.Logger;
  *
  * @author DASI Team
  */
-public class Service {
+public class ServiceClient {
 
     protected ClientDao clientDao = new ClientDao();
 
@@ -23,6 +23,7 @@ public class Service {
             clientDao.creer(client);
             JpaUtil.validerTransaction();
             resultat = client.getId();
+            Logger.getAnonymousLogger().log(Level.FINE, "Client successfully persisted");
         } catch (Exception ex) {
             Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service inscrireClient(client)", ex);
             JpaUtil.annulerTransaction();
