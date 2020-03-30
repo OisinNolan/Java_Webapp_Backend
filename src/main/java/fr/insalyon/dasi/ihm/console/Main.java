@@ -3,6 +3,8 @@ package fr.insalyon.dasi.ihm.console;
 import fr.insalyon.dasi.dao.JpaUtil;
 import fr.insalyon.dasi.metier.modele.Client;
 import fr.insalyon.dasi.metier.modele.Employe;
+import fr.insalyon.dasi.metier.modele.Genre;
+import fr.insalyon.dasi.metier.modele.ProfilAstral;
 import fr.insalyon.dasi.metier.service.ServiceAuthentication;
 import java.util.Date;
 
@@ -27,10 +29,12 @@ public class Main {
         JpaUtil.init();
         
         ServiceAuthentication sa = new ServiceAuthentication();
-        Employe e = new Employe("EMP", "emp", "emp@ma.il", "pass", "0871234556", Employe.Genre.M);
-        Client c = new Client("CLI", "cli", "cli@ent.mail", "passwrd", "some number!", new Date(), "57 rockfield grove");
+        Client c = new Client("CLI", "cli", "cli@ent.mail", "passwrd", "some number!", new Date(), "57 rockfield grove");        
         
-        System.out.println(sa.inscrire(e));
+        ProfilAstral pa = new ProfilAstral("a", "b", "c", "d");
+        pa.setClient(c);
+        c.setProfilAstral(pa);
+        
         System.out.println(sa.inscrire(c));
         
         JpaUtil.destroy();

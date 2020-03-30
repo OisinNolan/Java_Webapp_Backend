@@ -18,10 +18,6 @@ import javax.persistence.Entity;
 @DiscriminatorValue("Employe")
 public class Employe extends Utilisateur implements Serializable {
     
-    public enum Genre {
-        M, F
-    }
-    
     private Genre genre;
     
     protected Employe() {};
