@@ -6,6 +6,8 @@
 package fr.insalyon.dasi.metier.modele;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,6 +23,7 @@ import javax.persistence.MappedSuperclass;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="User_Type", discriminatorType = DiscriminatorType.STRING)
 public abstract class Utilisateur {
     
     @Id
@@ -33,6 +36,17 @@ public abstract class Utilisateur {
     protected String noTelephone;
     protected String motDePasse;
 
+    public Utilisateur() {};
+    
+    public Utilisateur(String nom, String prenom, String mail, 
+                       String motDePasse, String noTelephone) {
+        this.nom = nom;
+        this.prenom = prenom;
+        this.mail = mail;
+        this.motDePasse = motDePasse;
+        this.noTelephone = noTelephone; 
+    }
+    
     public Long getId() {
         return id;
     }

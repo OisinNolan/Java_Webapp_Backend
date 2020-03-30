@@ -2,6 +2,7 @@ package fr.insalyon.dasi.ihm.console;
 
 import fr.insalyon.dasi.dao.JpaUtil;
 import fr.insalyon.dasi.metier.modele.Client;
+import fr.insalyon.dasi.metier.modele.Employe;
 import fr.insalyon.dasi.metier.service.ServiceAuthentication;
 import java.util.Date;
 
@@ -26,9 +27,11 @@ public class Main {
         JpaUtil.init();
         
         ServiceAuthentication sa = new ServiceAuthentication();
-        Client c = new Client("NOLAN", "Oisin", "oinolan@tcd.ie", "myPass123", "0873491699", new Date(), "57 Greenfield Drive");
+        Employe e = new Employe("EMP", "emp", "emp@ma.il", "pass", "0871234556", Employe.Genre.M);
+        Client c = new Client("CLI", "cli", "cli@ent.mail", "passwrd", "some number!", new Date(), "57 rockfield grove");
+        
+        System.out.println(sa.inscrire(e));
         System.out.println(sa.inscrire(c));
-        System.out.println(sa.rechercherClientParId(1L).getPrenom());
         
         JpaUtil.destroy();
         
