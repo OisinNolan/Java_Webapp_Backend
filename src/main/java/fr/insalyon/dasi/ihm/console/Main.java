@@ -2,18 +2,16 @@ package fr.insalyon.dasi.ihm.console;
 
 import fr.insalyon.dasi.dao.JpaUtil;
 import fr.insalyon.dasi.metier.modele.Client;
+import fr.insalyon.dasi.metier.modele.Consultation;
 import fr.insalyon.dasi.metier.modele.Employe;
 import fr.insalyon.dasi.metier.modele.Genre;
 import fr.insalyon.dasi.metier.modele.ProfilAstral;
+import fr.insalyon.dasi.metier.modele.Astrologue;
+import fr.insalyon.dasi.metier.modele.Medium;
 import fr.insalyon.dasi.metier.service.ServiceAuthentication;
+import fr.insalyon.dasi.metier.service.ServiceConsultation;
+import fr.insalyon.dasi.metier.service.ServiceMedium;
 import java.util.Date;
-
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 /**
  *
@@ -23,21 +21,47 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // TODO : Pensez à créer une unité de persistance "DASI-PU" et à vérifier son nom dans la classe JpaUtil
-        // Contrôlez l'affichage du log de JpaUtil grâce à la méthode log de la classe JpaUtil
-        
         JpaUtil.init();
         
-        ServiceAuthentication sa = new ServiceAuthentication();
-        Client c = new Client("CLI", "cli", "cli@ent.mail", "passwrd", "some number!", new Date(), "57 rockfield grove");        
-        
-        ProfilAstral pa = new ProfilAstral("a", "b", "c", "d");
-        pa.setClient(c);
-        c.setProfilAstral(pa);
-        
-        System.out.println(sa.inscrire(c));
+        testAuthentication();
+        testConsultation();
         
         JpaUtil.destroy();
         
+    }
+    
+    public static void testAuthentication() {
+        ServiceAuthentication sa = new ServiceAuthentication();
+        Client c = new Client("CLI", "ent", "cli@ent.mail", "passwrd", "0871234567", new Date(), "57 greenfield drive");        
+        Employe e = new Employe("EMP", "loye", "emp@loye.mail", "pass", "0871234567", Genre.F);
+        sa.inscrire(c);
+        sa.inscrire(e);
+        Client found = sa.rechercherClientParId(1L);
+        System.out.println(found.getPrenom());
+    }
+    
+    public static void testConsultation() {
+        ServiceConsultation sc = new ServiceConsultation();
+        ServiceAuthentication sa = new ServiceAuthentication();
+        ServiceMedium sm = new ServiceMedium();
+        // Here the client would have been selected by the employee using the GUI
+        Client selectedClient = sa.rechercherClientParId(1L);
+        // Here we can get the employee's details using the Auth service
+        // easily as they should be the user who is currently logged in locally
+        Employe loggedInUser = sa.rechercherEmployeParId(2L);
+        sm.setupMediums();
+        Medium chosenMedium = sm.rechercherParId(1L);
+        
+        Consultation c = new Consultation(loggedInUser, selectedClient, chosenMedium);
+        
+        // starting the consultation
+        c.setDebut(new Date());
+        
+        // ending the consultation
+        c.setFin(new Date());
+        
+        c.setCommentaire("Great session !");
+        
+        System.out.println(sc.validerConsultation(c));
     }
 }

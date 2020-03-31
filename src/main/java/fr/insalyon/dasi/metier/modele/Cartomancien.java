@@ -14,7 +14,7 @@ import javax.persistence.Entity;
  * @author oisinnolan
  */
 @Entity
-@DiscriminatorValue("Cartomancien")
+@DiscriminatorValue("cartomancien")
 public class Cartomancien extends Medium implements Serializable {
     public Cartomancien() {};
     

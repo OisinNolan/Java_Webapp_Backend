@@ -18,7 +18,7 @@ import javax.persistence.Temporal;
  * @author DASI Team
  */
 @Entity
-@DiscriminatorValue("Client")
+@DiscriminatorValue("client")
 public class Client extends Utilisateur implements Serializable{
 
     @Temporal(javax.persistence.TemporalType.DATE)

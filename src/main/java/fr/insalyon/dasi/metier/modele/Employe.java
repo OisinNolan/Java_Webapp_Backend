@@ -15,7 +15,7 @@ import javax.persistence.Entity;
  */
 
 @Entity
-@DiscriminatorValue("Employe")
+@DiscriminatorValue("employe")
 public class Employe extends Utilisateur implements Serializable {
     
     private Genre genre;

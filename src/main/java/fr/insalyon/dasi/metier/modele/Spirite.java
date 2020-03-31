@@ -15,7 +15,7 @@ import javax.persistence.Entity;
  */
 
 @Entity
-@DiscriminatorValue("Spirite")
+@DiscriminatorValue("spirite")
 public class Spirite extends Medium implements Serializable {
     
     private String support;

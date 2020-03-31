@@ -14,7 +14,7 @@ import javax.persistence.Entity;
  * @author oisinnolan
  */
 @Entity
-@DiscriminatorValue("Cartomancien")
+@DiscriminatorValue("astrologue")
 public class Astrologue extends Medium implements Serializable {
     
     private String formation;

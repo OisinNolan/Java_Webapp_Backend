@@ -5,6 +5,8 @@
  */
 package fr.insalyon.dasi.dao;
 
+import fr.insalyon.dasi.metier.modele.Client;
+import fr.insalyon.dasi.metier.modele.Employe;
 import fr.insalyon.dasi.metier.modele.Utilisateur;
 import javax.persistence.EntityManager;
 
@@ -12,6 +14,7 @@ import javax.persistence.EntityManager;
  *
  * @author oisinnolan
  */
+
 public class UtilisateurDao {
     
     public void creer(Utilisateur utilisateur) {
@@ -22,6 +25,16 @@ public class UtilisateurDao {
     public Utilisateur chercherParId(Long id) {
         EntityManager em = JpaUtil.obtenirContextePersistance();
         return em.find(Utilisateur.class, id); // renvoie null si l'identifiant n'existe pas
+    }
+    
+    public Client chercherClientParId(Long id) {
+        EntityManager em = JpaUtil.obtenirContextePersistance();
+        return em.find(Client.class, id);
+    }
+    
+    public Employe chercherEmployeParId(Long id) {
+        EntityManager em = JpaUtil.obtenirContextePersistance();
+        return em.find(Employe.class, id);
     }
     
 }
