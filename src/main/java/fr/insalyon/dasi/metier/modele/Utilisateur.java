@@ -5,6 +5,7 @@
  */
 package fr.insalyon.dasi.metier.modele;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -14,7 +15,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.MappedSuperclass;
 
 /**
  *
@@ -24,7 +24,7 @@ import javax.persistence.MappedSuperclass;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="User_Type", discriminatorType = DiscriminatorType.STRING)
-public abstract class Utilisateur {
+public abstract class Utilisateur  implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,24 +35,22 @@ public abstract class Utilisateur {
     protected String mail;
     protected String noTelephone;
     protected String motDePasse;
+    protected Genre genre; //You need to know the gender of the client, title of the client is mentioned in the message for the employee
 
     public Utilisateur() {};
     
     public Utilisateur(String nom, String prenom, String mail, 
-                       String motDePasse, String noTelephone) {
+                       String motDePasse, String noTelephone, Genre genre) {
         this.nom = nom;
         this.prenom = prenom;
         this.mail = mail;
         this.motDePasse = motDePasse;
         this.noTelephone = noTelephone; 
+        this.genre = genre;
     }
     
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getNom() {
@@ -93,5 +91,9 @@ public abstract class Utilisateur {
 
     public void setMotDePasse(String motDePasse) {
         this.motDePasse = motDePasse;
+    }
+
+    public Genre getGenre() {
+        return genre;
     }
 }

@@ -6,8 +6,9 @@
 package fr.insalyon.dasi.dao;
 
 import fr.insalyon.dasi.metier.modele.Medium;
-import fr.insalyon.dasi.metier.modele.Utilisateur;
+import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -23,6 +24,26 @@ public class MediumDao {
     public Medium chercherParId(Long id) {
         EntityManager em = JpaUtil.obtenirContextePersistance();
         return em.find(Medium.class, id); // renvoie null si l'identifiant n'existe pas
+    }
+    
+    public Medium chercherParDenomination(String denomination) {
+        EntityManager em = JpaUtil.obtenirContextePersistance();
+        TypedQuery<Medium> query = em.createQuery(
+                "SELECT m FROM Medium m WHERE m.denomination = :denomination", Medium.class);
+        query.setParameter("denomination", denomination); // correspond au paramètre ":denomination" dans la requête
+        List<Medium> mediums = query.getResultList();
+        Medium result = null;
+        if (!mediums.isEmpty()) {
+            result = mediums.get(0); // premier de la liste
+        }
+        return result;
+    }
+    
+    public List<Medium> listerMediums() {
+        EntityManager em = JpaUtil.obtenirContextePersistance();
+        TypedQuery<Medium> query = em.createQuery(
+                "SELECT m FROM Medium m ORDER BY m.denomination ASC", Medium.class);
+        return query.getResultList();
     }
     
 }

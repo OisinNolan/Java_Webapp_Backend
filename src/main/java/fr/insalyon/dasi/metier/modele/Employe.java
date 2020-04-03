@@ -5,7 +5,6 @@
  */
 package fr.insalyon.dasi.metier.modele;
 
-import java.io.Serializable;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
@@ -16,27 +15,14 @@ import javax.persistence.Entity;
 
 @Entity
 @DiscriminatorValue("employe")
-public class Employe extends Utilisateur implements Serializable {
-    
-    private Genre genre;
+public class Employe extends Utilisateur {
     
     protected Employe() {};
     
     public Employe(String nom, String prenom, String mail, 
                   String motDePasse, String noTelephone, Genre genre) {
-        super(nom, prenom, mail, motDePasse, noTelephone);  
+        super(nom, prenom, mail, motDePasse, noTelephone, genre);  
         this.noTelephone = noTelephone;
         this.genre = genre;
-    }
-
-    public Genre getGenre() {
-        return genre;
-    }
-
-    public void setGenre(Genre genre) {
-        this.genre = genre;
-    }
-    
-    
-    
+    }    
 }

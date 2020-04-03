@@ -6,6 +6,7 @@ import fr.insalyon.dasi.metier.modele.Client;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.eclipse.persistence.jpa.jpql.parser.DateTime;
 
 /**
  *
@@ -25,13 +26,22 @@ public class ServiceClient {
             resultat = client.getId();
             Logger.getAnonymousLogger().log(Level.FINE, "Client successfully persisted");
         } catch (Exception ex) {
-            Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service inscrireClient(client)", ex);
+            Logger.getAnonymousLogger().log(Level.WARNING, 
+                    "Exception lors de l'appel au Service inscrireClient(client)", ex);
             JpaUtil.annulerTransaction();
             resultat = null;
         } finally {
             JpaUtil.fermerContextePersistance();
         }
         return resultat;
+    }
+    
+    private String messageInscription(Client client, boolean reussi){
+        return null;
+    }
+    
+    public String confirmerConsultation(Client client, DateTime date){
+        return null;
     }
 
     public Client rechercherClientParId(Long id) {
@@ -40,7 +50,8 @@ public class ServiceClient {
         try {
             resultat = clientDao.chercherParId(id);
         } catch (Exception ex) {
-            Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service rechercherClientParId(id)", ex);
+            Logger.getAnonymousLogger().log(Level.WARNING, 
+                    "Exception lors de l'appel au Service rechercherClientParId(id)", ex);
             resultat = null;
         } finally {
             JpaUtil.fermerContextePersistance();
@@ -61,7 +72,8 @@ public class ServiceClient {
                 }
             }
         } catch (Exception ex) {
-            Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service authentifierClient(mail,motDePasse)", ex);
+            Logger.getAnonymousLogger().log(Level.WARNING, 
+                    "Exception lors de l'appel au Service authentifierClient(mail,motDePasse)", ex);
             resultat = null;
         } finally {
             JpaUtil.fermerContextePersistance();
@@ -75,7 +87,8 @@ public class ServiceClient {
         try {
             resultat = clientDao.listerClients();
         } catch (Exception ex) {
-            Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service listerClients()", ex);
+            Logger.getAnonymousLogger().log(Level.WARNING, 
+                    "Exception lors de l'appel au Service listerClients()", ex);
             resultat = null;
         } finally {
             JpaUtil.fermerContextePersistance();

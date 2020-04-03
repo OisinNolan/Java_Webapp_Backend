@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author oisinnolan
  */
-public class ServiceAuthentication {
+public class ServiceAuthentification {
     
     protected UtilisateurDao utilisateurDao = new UtilisateurDao();
 

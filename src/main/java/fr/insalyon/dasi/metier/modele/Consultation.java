@@ -31,6 +31,7 @@ public class Consultation implements Serializable {
     private Date fin;
     private String commentaire;
     
+    //TODO: ManyToOne(mappedBy: "", cascade = CascadeType.the-right-type) p.24
     @ManyToOne()
     private Employe employe;
     @ManyToOne()

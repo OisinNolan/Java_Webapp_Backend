@@ -1,14 +1,9 @@
 package fr.insalyon.dasi.metier.modele;
 
-import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
@@ -19,7 +14,7 @@ import javax.persistence.Temporal;
  */
 @Entity
 @DiscriminatorValue("client")
-public class Client extends Utilisateur implements Serializable{
+public class Client extends Utilisateur{
 
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dateNaissance;
@@ -33,8 +28,8 @@ public class Client extends Utilisateur implements Serializable{
     
     public Client(String nom, String prenom, String mail, 
                   String motDePasse, String noTelephone,
-                  Date dateNaissance, String adresse) {
-        super(nom, prenom, mail, motDePasse, noTelephone);     
+                   Genre genre, Date dateNaissance, String adresse) {
+        super(nom, prenom, mail, motDePasse, noTelephone, genre);     
         this.dateNaissance = dateNaissance;
         this.adresse = adresse;
     }

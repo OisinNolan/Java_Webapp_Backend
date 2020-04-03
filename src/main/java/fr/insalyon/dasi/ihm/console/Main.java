@@ -5,13 +5,12 @@ import fr.insalyon.dasi.metier.modele.Client;
 import fr.insalyon.dasi.metier.modele.Consultation;
 import fr.insalyon.dasi.metier.modele.Employe;
 import fr.insalyon.dasi.metier.modele.Genre;
-import fr.insalyon.dasi.metier.modele.ProfilAstral;
-import fr.insalyon.dasi.metier.modele.Astrologue;
 import fr.insalyon.dasi.metier.modele.Medium;
-import fr.insalyon.dasi.metier.service.ServiceAuthentication;
+import fr.insalyon.dasi.metier.service.ServiceAuthentification;
 import fr.insalyon.dasi.metier.service.ServiceConsultation;
 import fr.insalyon.dasi.metier.service.ServiceMedium;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -25,14 +24,17 @@ public class Main {
         
         testAuthentication();
         testConsultation();
+
+        testHistoriqueClient();
         
+       
         JpaUtil.destroy();
         
     }
     
     public static void testAuthentication() {
-        ServiceAuthentication sa = new ServiceAuthentication();
-        Client c = new Client("CLI", "ent", "cli@ent.mail", "passwrd", "0871234567", new Date(), "57 greenfield drive");        
+        ServiceAuthentification sa = new ServiceAuthentification();
+        Client c = new Client("CLI", "ent", "cli@ent.mail", "passwrd", "0871234567", Genre.M, new Date(), "57 greenfield drive");        
         Employe e = new Employe("EMP", "loye", "emp@loye.mail", "pass", "0871234567", Genre.F);
         sa.inscrire(c);
         sa.inscrire(e);
@@ -42,7 +44,7 @@ public class Main {
     
     public static void testConsultation() {
         ServiceConsultation sc = new ServiceConsultation();
-        ServiceAuthentication sa = new ServiceAuthentication();
+        ServiceAuthentification sa = new ServiceAuthentification();
         ServiceMedium sm = new ServiceMedium();
         // Here the client would have been selected by the employee using the GUI
         Client selectedClient = sa.rechercherClientParId(1L);
@@ -63,5 +65,19 @@ public class Main {
         c.setCommentaire("Great session !");
         
         System.out.println(sc.validerConsultation(c));
+    }
+    
+    public static void testHistoriqueClient() {
+        // Create more consultations to list
+        testConsultation();
+        testConsultation();
+        
+        ServiceConsultation sc = new ServiceConsultation();
+        ServiceAuthentification sa = new ServiceAuthentification();
+        // Here the client would have been selected by the employee using the GUI
+        Client selectedClient = sa.rechercherClientParId(1L);
+        List<Consultation> historique = sc.listerHistoriqueConsultations(selectedClient);
+        
+        System.out.println("\n\n Historique de consultations du client: " + historique);
     }
 }
