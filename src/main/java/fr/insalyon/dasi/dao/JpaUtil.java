@@ -25,7 +25,7 @@ public class JpaUtil {
      * <br><strong>Vérifier le nom de l'unité de persistance
      * (cf.&nbsp;persistence.xml)</strong>
      */
-    public static final String PERSISTENCE_UNIT_NAME = "fr.insalyon.dasi_DASI-TD1-Correction_jar_1.0PU";
+    public static final String PERSISTENCE_UNIT_NAME = "fr.insalyon.dasi_PredictIF_PU";
     /**
      * Factory de Entity Manager liée à l'unité de persistance.
      * <br/><strong>Vérifier le nom de l'unité de persistance indiquée dans
