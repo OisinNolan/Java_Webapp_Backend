@@ -1,12 +1,13 @@
 package fr.insalyon.dasi.ihm.console;
 
+import util.Message;
 import fr.insalyon.dasi.dao.JpaUtil;
 import fr.insalyon.dasi.metier.modele.Client;
 import fr.insalyon.dasi.metier.modele.Consultation;
 import fr.insalyon.dasi.metier.modele.Employe;
 import fr.insalyon.dasi.metier.modele.Genre;
 import fr.insalyon.dasi.metier.modele.Medium;
-import fr.insalyon.dasi.metier.service.ServiceAuthentification;
+import fr.insalyon.dasi.metier.service.ServiceUtilisateur;
 import fr.insalyon.dasi.metier.service.ServiceConsultation;
 import fr.insalyon.dasi.metier.service.ServiceMedium;
 import java.util.Date;
@@ -24,16 +25,20 @@ public class Main {
         
         testAuthentication();
         testConsultation();
-
-        testHistoriqueClient();
         
-       
         JpaUtil.destroy();
         
     }
     
+    /*
+    
+        The code used in the front end (client side) will resemble
+        the code used in these test functions
+    
+    */
+    
     public static void testAuthentication() {
-        ServiceAuthentification sa = new ServiceAuthentification();
+        ServiceUtilisateur sa = new ServiceUtilisateur();
         Client c = new Client("CLI", "ent", "cli@ent.mail", "passwrd", "0871234567", Genre.M, new Date(), "57 greenfield drive");        
         Employe e = new Employe("EMP", "loye", "emp@loye.mail", "pass", "0871234567", Genre.F);
         sa.inscrire(c);
@@ -44,27 +49,35 @@ public class Main {
     
     public static void testConsultation() {
         ServiceConsultation sc = new ServiceConsultation();
-        ServiceAuthentification sa = new ServiceAuthentification();
+        ServiceUtilisateur sa = new ServiceUtilisateur();
         ServiceMedium sm = new ServiceMedium();
-        // Here the client would have been selected by the employee using the GUI
+        // Here the client would be the currently logged in user
         Client selectedClient = sa.rechercherClientParId(1L);
-        // Here we can get the employee's details using the Auth service
-        // easily as they should be the user who is currently logged in locally
-        Employe loggedInUser = sa.rechercherEmployeParId(2L);
         sm.setupMediums();
         Medium chosenMedium = sm.rechercherParId(1L);
+
+        Employe employe = sa.choisirEmployePourTravail(chosenMedium);
+        Consultation consultation = new Consultation(employe, selectedClient, chosenMedium);
         
-        Consultation c = new Consultation(loggedInUser, selectedClient, chosenMedium);
+        System.out.println("Consultation: " + sc.creerConsultation(consultation));
         
-        // starting the consultation
-        c.setDebut(new Date());
+        employe.setTravailActuel(consultation);
+        employe.setNoTravail(employe.getNoTravail()+1);
+        sa.mettreAJour(employe);
         
-        // ending the consultation
-        c.setFin(new Date());
+        sc.notifierEmploye(consultation);
         
-        c.setCommentaire("Great session !");
+        // This function will be called when the employe indicates
+        // that they're ready to start the consultation
+        sc.notifierClient(consultation);
         
-        System.out.println(sc.validerConsultation(c));
+        // These functions can be called to begin / end the consultation
+        sc.commencerConsultation(consultation);
+        
+        // Example of auto-generated prediction
+        System.out.println(sc.genererPrediction(consultation, 1, 2, 3));
+        
+        sc.validerConsultation(consultation, "Consultation went great !");
     }
     
     public static void testHistoriqueClient() {
@@ -73,7 +86,7 @@ public class Main {
         testConsultation();
         
         ServiceConsultation sc = new ServiceConsultation();
-        ServiceAuthentification sa = new ServiceAuthentification();
+        ServiceUtilisateur sa = new ServiceUtilisateur();
         // Here the client would have been selected by the employee using the GUI
         Client selectedClient = sa.rechercherClientParId(1L);
         List<Consultation> historique = sc.listerHistoriqueConsultations(selectedClient);

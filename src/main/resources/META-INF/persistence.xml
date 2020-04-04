@@ -4,10 +4,10 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/PredictifDB"/>
-      <property name="javax.persistence.jdbc.user" value="predictif"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/DASI_DB"/>
+      <property name="javax.persistence.jdbc.user" value="dasi"/>
       <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
-      <property name="javax.persistence.jdbc.password" value="predictif"/>
+      <property name="javax.persistence.jdbc.password" value="dasi"/>
       <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
     </properties>
   </persistence-unit>

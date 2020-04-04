@@ -24,6 +24,11 @@ public class ConsultationDao {
         em.persist(consultation);
     }
     
+    public void mettreAJour(Consultation consultation) {
+        EntityManager em = JpaUtil.obtenirContextePersistance();
+        em.merge(consultation);
+    }
+    
     public List<Consultation> chercherParUtilisateur(Utilisateur utilisateur) {
         EntityManager em = JpaUtil.obtenirContextePersistance();
         TypedQuery<Consultation> query;
