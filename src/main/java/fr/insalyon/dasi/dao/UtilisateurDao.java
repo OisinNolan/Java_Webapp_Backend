@@ -98,7 +98,9 @@ public class UtilisateurDao {
     
     public Employe choisirParGenre(Genre genre){
         EntityManager em = JpaUtil.obtenirContextePersistance();
-        TypedQuery<Employe> query = em.createQuery("SELECT e FROM Employe e WHERE e.genre = :genre", Employe.class);
+        // This JPA query *should* get the employee of gender 'genre' with the smallest noTravail
+        // (Needs to be tested)
+        TypedQuery<Employe> query = em.createQuery("SELECT e FROM Employe e WHERE e.genre = :genre ORDER BY e.noTravail ASC", Employe.class).setMaxResults(1);
         query.setParameter("genre", genre); // correspond au paramètre ":genre" dans la requête
         
         List<Employe> employes = query.getResultList();
