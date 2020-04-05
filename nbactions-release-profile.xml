@@ -12,6 +12,7 @@
             <properties>
                 <exec.args>-classpath %classpath fr.insalyon.dasi.ihm.console.Main</exec.args>
                 <exec.executable>java</exec.executable>
+                <exec.workingdir>C:\Users\pitf9\Documents\Studia\INSA\DASI\PredictIF\DASI_TP</exec.workingdir>
             </properties>
         </action>
         <action>
@@ -27,6 +28,7 @@
                 <exec.args>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath fr.insalyon.dasi.ihm.console.Main</exec.args>
                 <exec.executable>java</exec.executable>
                 <jpda.listen>true</jpda.listen>
+                <exec.workingdir>C:\Users\pitf9\Documents\Studia\INSA\DASI\PredictIF\DASI_TP</exec.workingdir>
             </properties>
         </action>
         <action>
@@ -41,6 +43,7 @@
             <properties>
                 <exec.args>-classpath %classpath fr.insalyon.dasi.ihm.console.Main</exec.args>
                 <exec.executable>java</exec.executable>
+                <exec.workingdir>C:\Users\pitf9\Documents\Studia\INSA\DASI\PredictIF\DASI_TP</exec.workingdir>
             </properties>
         </action>
     </actions>

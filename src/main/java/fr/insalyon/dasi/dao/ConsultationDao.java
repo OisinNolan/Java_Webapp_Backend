@@ -8,8 +8,10 @@ package fr.insalyon.dasi.dao;
 import fr.insalyon.dasi.metier.modele.Client;
 import fr.insalyon.dasi.metier.modele.Consultation;
 import fr.insalyon.dasi.metier.modele.Employe;
+import fr.insalyon.dasi.metier.modele.Medium;
 import fr.insalyon.dasi.metier.modele.Utilisateur;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
@@ -38,5 +40,28 @@ public class ConsultationDao {
             query = em.createQuery("SELECT c FROM Consultation c WHERE c.employe = :utilisateur ORDER BY c.debut ASC", Consultation.class);
         }
         return query.setParameter("utilisateur", utilisateur).getResultList();
+    }
+    
+    public Map<Medium, Integer> listerNombreParMedium() {
+        EntityManager em = JpaUtil.obtenirContextePersistance();
+        TypedQuery<Medium> query = em.createQuery("SELECT c.medium FROM Consultation c GROUP BY c.medium", Medium.class);
+        List<Medium> mediums = query.getResultList();
+        
+        return null;
+    }
+    
+    public List<Medium> listerTopCinque() {
+        EntityManager em = JpaUtil.obtenirContextePersistance();
+        List<Integer> l = (List<Integer>) em.createQuery("SELECT c.MEDIUM_ID FROM Consultation c GROUP BY c.MEDIUM_ID").getResultList();
+        
+        return null;
+    }
+    
+    public Map<Employe, List<Client>> listerRepartitionClients() {
+        EntityManager em = JpaUtil.obtenirContextePersistance();
+        TypedQuery<Medium> query = em.createQuery("SELECT c.MEDIUM_ID FROM Consultation c GROUP BY c.MEDIUM_ID", Medium.class);
+        List<Medium> mediums = query.getResultList();
+        
+        return null;
     }
 }

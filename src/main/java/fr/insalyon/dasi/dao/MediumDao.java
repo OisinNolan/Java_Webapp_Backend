@@ -46,4 +46,5 @@ public class MediumDao {
         return query.getResultList();
     }
     
+    
 }

@@ -10,9 +10,9 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.5.0:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath ${packageClassName}</exec.args>
+                <exec.args>-classpath %classpath Main.java</exec.args>
                 <exec.executable>java</exec.executable>
-                <exec.workingdir>/Users/oisinnolan/Documents/DASI_TP_CODE/DASI_TP</exec.workingdir>
+                <exec.workingdir>C:\Users\pitf9\Documents\Studia\INSA\DASI\PredictIF\DASI_TP\src\main\java\fr\insalyon\dasi\ihm\console</exec.workingdir>
             </properties>
         </action>
         <action>
@@ -25,10 +25,10 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.5.0:exec</goal>
             </goals>
             <properties>
-                <exec.args>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath ${packageClassName}</exec.args>
+                <exec.args>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath Main.java</exec.args>
                 <exec.executable>java</exec.executable>
                 <jpda.listen>true</jpda.listen>
-                <exec.workingdir>/Users/oisinnolan/Documents/DASI_TP_CODE/DASI_TP</exec.workingdir>
+                <exec.workingdir>C:\Users\pitf9\Documents\Studia\INSA\DASI\PredictIF\DASI_TP\src\main\java\fr\insalyon\dasi\ihm\console</exec.workingdir>
             </properties>
         </action>
         <action>
@@ -41,9 +41,9 @@
                 <goal>org.codehaus.mojo:exec-maven-plugin:1.5.0:exec</goal>
             </goals>
             <properties>
-                <exec.args>-classpath %classpath ${packageClassName}</exec.args>
+                <exec.args>-classpath %classpath Main.java</exec.args>
                 <exec.executable>java</exec.executable>
-                <exec.workingdir>/Users/oisinnolan/Documents/DASI_TP_CODE/DASI_TP</exec.workingdir>
+                <exec.workingdir>C:\Users\pitf9\Documents\Studia\INSA\DASI\PredictIF\DASI_TP\src\main\java\fr\insalyon\dasi\ihm\console</exec.workingdir>
             </properties>
         </action>
     </actions>

@@ -13,11 +13,12 @@ import fr.insalyon.dasi.metier.modele.Consultation;
 import fr.insalyon.dasi.metier.modele.Genre;
 import fr.insalyon.dasi.metier.modele.Medium;
 import fr.insalyon.dasi.metier.modele.ProfilAstral;
+import static fr.insalyon.dasi.metier.modele.ProfilAstral_.client;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import util.*;
@@ -154,4 +155,50 @@ public class ServiceConsultation {
         
         return prediction;
     }
+    
+    public Map<Medium, Integer> listerNombreParMedium() {
+        Map<Medium, Integer> resultat = null;
+        JpaUtil.creerContextePersistance();
+        try {
+            resultat = consultationDao.listerNombreParMedium();
+        } catch (Exception ex) {
+            Logger.getAnonymousLogger().log(Level.WARNING,
+                    "Exception lors de l'appel au Service listerNombreParMedium()", ex);
+            resultat = null;
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        return resultat;
+    }
+    
+    public List<Medium> listerTopCinque() {
+        List<Medium> resultat = null;
+        JpaUtil.creerContextePersistance();
+        try {
+            resultat = consultationDao.listerTopCinque();
+        } catch (Exception ex) {
+            Logger.getAnonymousLogger().log(Level.WARNING,
+                    "Exception lors de l'appel au Service listerTopCinque()", ex);
+            resultat = null;
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        return resultat;
+    }
+    
+    public Map<Employe, List<Client>> listerRepartitionClients() {
+        Map<Employe, List<Client>> resultat = null;
+        JpaUtil.creerContextePersistance();
+        try {
+            resultat = consultationDao.listerRepartitionClients();
+        } catch (Exception ex) {
+            Logger.getAnonymousLogger().log(Level.WARNING,
+                    "Exception lors de l'appel au Service listerRepartitionClients()", ex);
+            resultat = null;
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        return resultat;
+    }
+    
 }

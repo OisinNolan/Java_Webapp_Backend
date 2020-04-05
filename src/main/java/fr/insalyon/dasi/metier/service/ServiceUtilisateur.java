@@ -77,7 +77,8 @@ public class ServiceUtilisateur {
             resultat = utilisateur.getId();
             Logger.getAnonymousLogger().log(Level.FINE, "User successfully persisted");
         } catch (Exception ex) {
-            Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service inscrireClient(client)", ex);
+            Logger.getAnonymousLogger().log(Level.WARNING, 
+                    "Exception lors de l'appel au Service inscrireClient(client)", ex);
             // Add switch statement here to handle various error types 
             // i.e unique constraint violated on email column
             JpaUtil.annulerTransaction();
@@ -94,7 +95,8 @@ public class ServiceUtilisateur {
         try {
             resultat = utilisateurDao.chercherParId(id);
         } catch (Exception ex) {
-            Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service rechercherUtilisateurParId(id)", ex);
+            Logger.getAnonymousLogger().log(Level.WARNING, 
+                    "Exception lors de l'appel au Service rechercherUtilisateurParId(id)", ex);
             resultat = null;
         } finally {
             JpaUtil.fermerContextePersistance();
@@ -114,7 +116,8 @@ public class ServiceUtilisateur {
         try {
             resultat = utilisateurDao.chercherClientParId(id);
         } catch (Exception ex) {
-            Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service rechercherClientParId(id)", ex);
+            Logger.getAnonymousLogger().log(Level.WARNING, 
+                    "Exception lors de l'appel au Service rechercherClientParId(id)", ex);
             resultat = null;
         } finally {
             JpaUtil.fermerContextePersistance();
@@ -153,7 +156,8 @@ public class ServiceUtilisateur {
         List<String> reponseAPI;
         try {
             reponseAPI = APIAstro.getProfil(client.getPrenom(), client.getDateNaissance());
-            ProfilAstral profilAstral = new ProfilAstral(reponseAPI.get(0), reponseAPI.get(1), reponseAPI.get(2), reponseAPI.get(3));
+            ProfilAstral profilAstral = new ProfilAstral(reponseAPI.get(0), 
+                    reponseAPI.get(1), reponseAPI.get(2), reponseAPI.get(3));
             client.setProfilAstral(profilAstral);
             this.mettreAJour(client);
             resultat = profilAstral.getId();
@@ -177,7 +181,8 @@ public class ServiceUtilisateur {
         try {
             resultat = utilisateurDao.chercherEmployeParId(id);
         } catch (Exception ex) {
-            Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service rechercherEmployeParId(id)", ex);
+            Logger.getAnonymousLogger().log(Level.WARNING,
+                    "Exception lors de l'appel au Service rechercherEmployeParId(id)", ex);
             resultat = null;
         } finally {
             JpaUtil.fermerContextePersistance();

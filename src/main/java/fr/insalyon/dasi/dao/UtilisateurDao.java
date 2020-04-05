@@ -96,7 +96,7 @@ public class UtilisateurDao {
         return query.getResultList();
     }
     
-    public Employe choisirParGenre(Genre genre){
+    public Employe choisirParGenre(Genre genre) {
         EntityManager em = JpaUtil.obtenirContextePersistance();
         // This JPA query *should* get the employee of gender 'genre' with the smallest noTravail
         // (Needs to be tested)
@@ -104,11 +104,14 @@ public class UtilisateurDao {
         query.setParameter("genre", genre); // correspond au paramètre ":genre" dans la requête
         
         List<Employe> employes = query.getResultList();
-        Employe result = null;
-        if (!employes.isEmpty()) {
-            result = employes.get(0); // premier de la liste
+        // Loop through Employees of the right gender sorted by the number of jobs ascending and choose the first one that is not currently busy
+        for (Employe employe : employes) {
+            if(employe.getTravailActuel() == null) {
+                return employe;
+            }
         }
-        return result;
+        // If none was busy return the first Employee (with the smallest number of jobs)
+        return employes.get(0);
     }
     
 }
