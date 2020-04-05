@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  *
- * @author Oisin Nolan, Piotr FrÄ…tczak
+ * @author Oisin Nolan, Piotr Fr¹tczak
  */
 public class Main {
 

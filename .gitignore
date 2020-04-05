@@ -1,4 +1,10 @@
 target/
+<<<<<<< HEAD
 .DS_Store
 persistence.xml
 nbactions*
+||||||| merged common ancestors
+.DS_Store
+=======
+.DS_Storenbactions*
+>>>>>>> master

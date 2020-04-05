@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -122,7 +122,7 @@ public class ServiceConsultation {
         
         String message = "Bonjour " + employe.getPrenom() + ". Consultation requise pour "
                 + (client.getGenre() == Genre.F ? "Mme " : "M ") + client.getPrenom() + " "
-                + client.getNom().toUpperCase() + ".\nMÃ©dium Ã  incarner : " + medium.getDenomination();
+                + client.getNom().toUpperCase() + ".\nMédium ? incarner : " + medium.getDenomination();
         
         Message.envoyerNotification(employe.getNoTelephone(), message);
     }
@@ -133,11 +133,11 @@ public class ServiceConsultation {
         Client client = consultation.getClient();
         Medium medium = consultation.getMedium();
         
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy Ã  HH'h'mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy ? HH'h'mm");
         
-        String message = "Bonjour " + client.getPrenom() + ". Jâ€™ai bien reÃ§u votre demande de consultation du "
-                +  dateFormat.format(consultation.getDateCreation()) + ".\nVous pouvez dÃ¨s Ã  prÃ©sent me contacter au " + employe.getNoTelephone()
-                + ". A tout de suite !\n\nMÃ©diumiquement " + "vÃ´tre, \n\n" + medium.getDenomination();
+        String message = "Bonjour " + client.getPrenom() + ". J’ai bien reçu votre demande de consultation du "
+                +  dateFormat.format(consultation.getDateCreation()) + ".\nVous pouvez d?s ? présent me contacter au " + employe.getNoTelephone()
+                + ". A tout de suite !\n\nMédiumiquement " + "vôtre, \n\n" + medium.getDenomination();
         
         Message.envoyerNotification(client.getNoTelephone(), message);
     }
@@ -157,4 +157,5 @@ public class ServiceConsultation {
         
         return prediction;
     }
+        
 }
