@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  *
- * @author DASI Team
+ * @author Oisin Nolan, Piotr Frątczak
  */
 public class Main {
 

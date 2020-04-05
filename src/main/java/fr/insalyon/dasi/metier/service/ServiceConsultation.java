@@ -15,6 +15,7 @@ import fr.insalyon.dasi.util.Message;
 import fr.insalyon.dasi.util.AstroTest;
 import fr.insalyon.dasi.metier.modele.Medium;
 import fr.insalyon.dasi.metier.modele.ProfilAstral;
+import fr.insalyon.dasi.metier.modele.Statistiques;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -84,6 +85,7 @@ public class ServiceConsultation {
             consultationDao.mettreAJour(consultation);
             JpaUtil.validerTransaction();
             resultat = consultation.getId();
+            Statistiques.ajouterConsultation(consultation);
             Logger.getAnonymousLogger().log(Level.FINE, "Consultation successfully validated");
         } catch (Exception ex) {
             Logger.getAnonymousLogger().log(Level.WARNING,
