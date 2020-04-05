@@ -7,6 +7,7 @@ package fr.insalyon.dasi.metier.modele;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,6 +26,8 @@ public class Consultation implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dateCreation;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date debut;
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -45,6 +48,7 @@ public class Consultation implements Serializable {
         this.employe = employe;
         this.client = client;
         this.medium = medium;
+        this.dateCreation = new Date();
     }
 
     public Long getId() {
@@ -98,6 +102,13 @@ public class Consultation implements Serializable {
     public void setMedium(Medium medium) {
         this.medium = medium;
     }
-    
+
+    public Date getDateCreation() {
+        return dateCreation;
+    }
+
+    public void setDateCreation(Date dateCreation) {
+        this.dateCreation = dateCreation;
+    }
     
 }

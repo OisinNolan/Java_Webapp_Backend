@@ -5,6 +5,7 @@
  */
 package fr.insalyon.dasi.metier.modele;
 
+import fr.insalyon.dasi.util.Genre;
 import java.io.Serializable;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;

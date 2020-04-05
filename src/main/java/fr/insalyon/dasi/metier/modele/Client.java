@@ -1,5 +1,6 @@
 package fr.insalyon.dasi.metier.modele;
 
+import fr.insalyon.dasi.util.Genre;
 import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
