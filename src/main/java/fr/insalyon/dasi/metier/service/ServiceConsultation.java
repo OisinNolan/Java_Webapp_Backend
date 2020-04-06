@@ -13,7 +13,6 @@ import fr.insalyon.dasi.metier.modele.Consultation;
 import fr.insalyon.dasi.metier.modele.Genre;
 import fr.insalyon.dasi.metier.modele.Medium;
 import fr.insalyon.dasi.metier.modele.ProfilAstral;
-import static fr.insalyon.dasi.metier.modele.ProfilAstral_.client;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;

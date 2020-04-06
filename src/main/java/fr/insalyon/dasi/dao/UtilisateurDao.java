@@ -104,6 +104,10 @@ public class UtilisateurDao {
         query.setParameter("genre", genre); // correspond au paramètre ":genre" dans la requête
         
         List<Employe> employes = query.getResultList();
+        /*
+        
+            This is handled in the jpa query
+        
         // Loop through Employees of the right gender sorted by the number of jobs ascending and choose the first one that is not currently busy
         for (Employe employe : employes) {
             if(employe.getTravailActuel() == null) {
@@ -111,6 +115,7 @@ public class UtilisateurDao {
             }
         }
         // If none was busy return the first Employee (with the smallest number of jobs)
+        */
         return employes.get(0);
     }
     
