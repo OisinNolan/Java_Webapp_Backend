@@ -44,5 +44,11 @@ public class Astrologue extends Medium implements Serializable {
     public void setPromotion(Integer promotion) {
         this.promotion = promotion;
     }
+
+    @Override
+    public String toString() {
+        return "Astrologue{" + super.toString() + "formation=" + formation + ", promotion=" + promotion + '}';
+    }
+ 
     
 }

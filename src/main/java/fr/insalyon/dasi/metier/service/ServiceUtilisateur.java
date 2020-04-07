@@ -13,6 +13,7 @@ import fr.insalyon.dasi.metier.modele.Medium;
 import fr.insalyon.dasi.metier.modele.ProfilAstral;
 import fr.insalyon.dasi.metier.modele.Utilisateur;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,14 +55,18 @@ public class ServiceUtilisateur {
             
             if(utilisateur instanceof Client) {
                 Client nouveauClient = (Client) utilisateur;
-                String objet = resultat == null ? "Bonjour " + nouveauClient.getPrenom() + ", votre inscription au service PREDICT’IF a malencontreusement échoué...\n"
+                Long idProfilAstral = this.creerProfilAstral(nouveauClient);
+                
+                boolean echec = (resultat == null || idProfilAstral == null );
+                
+                String objet = echec ? "Bonjour " + nouveauClient.getPrenom() + ", votre inscription au service PREDICT’IF a malencontreusement échoué...\n"
                         + "Merci de recommencer ultérieurement."
                         : "Bonjour " + nouveauClient.getPrenom() + ", nous vous confirmons votre inscription au service PREDICT’IF."
                         + "\nRendez-vous vite sur notre site pour consulter votre profil astrologique et profiter des dons incroyables de nos mediums";
-                String corps = resultat == null ? "Echec de l’inscription chez PREDICT’IF" : "Bienvenue chez PREDICT’IF";
+                String corps = echec ? "Echec de l’inscription chez PREDICT’IF" : "Bienvenue chez PREDICT’IF";
                 Message.envoyerMail("contact@predict.if", nouveauClient.getMail(), objet, corps);
 
-                this.creerProfilAstral(nouveauClient);
+                
             }
         }
         return resultat;

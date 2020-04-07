@@ -57,5 +57,10 @@ public class Client extends Utilisateur{
     public void setProfilAstral(ProfilAstral profilAstral) {
         this.profilAstral = profilAstral;
     }
+
+    @Override
+    public String toString() {
+        return "Client{" + super.toString() + "dateNaissance=" + dateNaissance + ", adresse=" + adresse + ", profilAstral=" + profilAstral + '}';
+    }
     
 }

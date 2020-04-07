@@ -80,6 +80,7 @@ public class ServiceConsultation {
             JpaUtil.ouvrirTransaction();
             consultation.setFin(new Date());
             consultation.setCommentaire(commentaire);
+            consultation.getEmploye().setTravailActuel(-1L);
             consultationDao.mettreAJour(consultation);
             JpaUtil.validerTransaction();
             resultat = consultation.getId();

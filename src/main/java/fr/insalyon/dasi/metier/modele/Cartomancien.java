@@ -22,4 +22,10 @@ public class Cartomancien extends Medium implements Serializable {
                         String presentation) {
         super(denomination, genre, presentation);
     }
+
+    @Override
+    public String toString() {
+        return "Cartomancien{" + super.toString() + '}';
+    }
+    
 }

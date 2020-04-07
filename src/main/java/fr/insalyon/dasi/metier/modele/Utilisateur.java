@@ -96,4 +96,9 @@ public abstract class Utilisateur  implements Serializable{
     public Genre getGenre() {
         return genre;
     }
+
+    @Override
+    public String toString() {
+        return "id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", mail=" + mail + ", noTelephone=" + noTelephone + ", motDePasse=" + motDePasse + ", genre=" + genre + ", ";
+    }
 }

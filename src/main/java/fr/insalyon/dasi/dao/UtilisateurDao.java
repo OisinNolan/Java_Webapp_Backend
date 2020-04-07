@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 /**
@@ -57,7 +58,7 @@ public class UtilisateurDao {
     
     public Client chercherClientParMail(String clientMail) {
         EntityManager em = JpaUtil.obtenirContextePersistance();
-        TypedQuery<Client> query = em.createQuery("SELECT * FROM Client c WHERE c.mail = :mail", Client.class);
+        TypedQuery<Client> query = em.createQuery("SELECT c FROM Client c WHERE c.mail = :mail", Client.class);
         query.setParameter("mail", clientMail); // correspond au paramètre ":mail" dans la requête
         List<Client> clients = query.getResultList();
         Client result = null;
@@ -103,7 +104,7 @@ public class UtilisateurDao {
         TypedQuery<Employe> query = em.createQuery("SELECT e FROM Employe e WHERE e.genre = :genre ORDER BY e.noTravail ASC", Employe.class).setMaxResults(1);
         query.setParameter("genre", genre); // correspond au paramètre ":genre" dans la requête
         
-        List<Employe> employes = query.getResultList();
+        Employe employe = query.getSingleResult();
         /*
         
             This is handled in the jpa query
@@ -116,7 +117,26 @@ public class UtilisateurDao {
         }
         // If none was busy return the first Employee (with the smallest number of jobs)
         */
-        return employes.get(0);
+        return employe;
+    }
+    
+    // These functions are used by the ListerMediums() function in the medium service
+    public long nombreEmployesHommeDisponible() {
+        EntityManager em = JpaUtil.obtenirContextePersistance();
+        Query query = em.createQuery("SELECT count(e) FROM Employe e WHERE e.travailActuel = :pasDeTravail AND e.genre = :genre", Employe.class);
+        query.setParameter("pasDeTravail", -1L);
+        query.setParameter("genre", Genre.M);
+        long hommesDisponibles = (long) query.getSingleResult();
+        return hommesDisponibles;
+    }
+    
+    public long nombreEmployesFemmeDisponible() {
+        EntityManager em = JpaUtil.obtenirContextePersistance();
+        Query query = em.createQuery("SELECT count(e) FROM Employe e WHERE e.travailActuel = :pasDeTravail AND e.genre = :genre", Employe.class);
+        query.setParameter("pasDeTravail", -1L);
+        query.setParameter("genre", Genre.F);
+        long femmesDisponibles = (long) query.getSingleResult();
+        return femmesDisponibles;
     }
     
 }

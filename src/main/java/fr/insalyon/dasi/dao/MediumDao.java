@@ -5,6 +5,7 @@
  */
 package fr.insalyon.dasi.dao;
 
+import fr.insalyon.dasi.metier.modele.Genre;
 import fr.insalyon.dasi.metier.modele.Medium;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -46,5 +47,11 @@ public class MediumDao {
         return query.getResultList();
     }
     
-    
+    public List<Medium> listerMediumsDeGenre(Genre genre) {
+        EntityManager em = JpaUtil.obtenirContextePersistance();
+        TypedQuery<Medium> query = em.createQuery(
+                "SELECT m FROM Medium m WHERE m.genre = :genre ORDER BY m.denomination ASC", Medium.class);
+        query.setParameter("genre", genre);
+        return query.getResultList();
+    }
 }
