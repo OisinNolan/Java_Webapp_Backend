@@ -37,7 +37,7 @@ public class Consultation implements Serializable {
     //TODO: ManyToOne(mappedBy: "", cascade = CascadeType.the-right-type) p.24
     @ManyToOne(cascade = CascadeType.MERGE)
     private Employe employe;
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Client client;
     @ManyToOne()
     private Medium medium;

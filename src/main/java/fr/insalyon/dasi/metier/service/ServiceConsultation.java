@@ -38,6 +38,10 @@ public class ServiceConsultation {
         try {
             JpaUtil.ouvrirTransaction();
             consultationDao.creer(consultation);
+            consultation.getClient().setIdConsultationActuel(consultation.getId());
+            consultation.getEmploye().setTravailActuel(consultation.getId());
+            consultation.getEmploye().setNoTravail(consultation.getEmploye().getNoTravail() + 1);
+            consultationDao.mettreAJour(consultation);
             JpaUtil.validerTransaction();
             resultat = consultation.getId();
             Logger.getAnonymousLogger().log(Level.FINE, "Consultation successfully persisted");
@@ -45,6 +49,21 @@ public class ServiceConsultation {
             Logger.getAnonymousLogger().log(Level.WARNING,
                     "Exception during call to creerConsultation() in ServiceConsultation", ex);
             JpaUtil.annulerTransaction();
+            resultat = null;
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        return resultat;
+    }
+    
+    public Consultation rechercherConsultationParId(Long id) {
+        Consultation resultat = null;
+        JpaUtil.creerContextePersistance();
+        try {
+            resultat = consultationDao.chercherParId(id);
+        } catch (Exception ex) {
+            Logger.getAnonymousLogger().log(Level.WARNING, 
+                    "Exception lors de l'appel au Service rechercherConsultationParId(id)", ex);
             resultat = null;
         } finally {
             JpaUtil.fermerContextePersistance();

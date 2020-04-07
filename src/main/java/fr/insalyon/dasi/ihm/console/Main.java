@@ -27,6 +27,8 @@ import java.util.Random;
  */
 public class Main {
 
+    public static Employe EMPLOYE_CHOISI;
+    
     public static void main(String[] args) {
 
         JpaUtil.init();
@@ -35,11 +37,28 @@ public class Main {
         
         // Demonstration of backend functionality
         // Assertions used for demo, assertions must be enabled in VM options for this to work
+        
+        // CLIENT Functionality
         inscription();
         connexion();
         chercherProfilAstral();
         chercherMediumsDisponibles();
         choisirMedium();
+        
+        // EMPLOYE Functionality
+        connexionEmploye();
+        chercherTravailActuel();
+        chercherHistoriqueConsultationsClient();
+        commencerConsultation();
+        chercherPredictions();
+        validerConsultation();
+        
+        // This function runs 100 simulated consultations and displays for each one
+        // the chosen employee along with their gender and the number of consultations
+        // they have already done.
+        //
+        // This demonstrates our algorithm equally distributing the workload.
+        simulationConsultations(100);
         
         printTitle("Fin demo");
         
@@ -47,34 +66,11 @@ public class Main {
         
     }
     
+    /*
     
-    public static void printTitle(String title) {
-        System.out.println("\n------------------------------------\n    " 
-                + title + "\n------------------------------------");
-
-    }
+        CLIENT FUNCTIONS
     
-    public static void setupDB() {
-        // Hard-coded employes
-        Employe e1 = new Employe("VOYRET", "Alice", "alice.voyret@hotmail.com", "motDePasse", "0486856520", Genre.F);
-        Employe e2 = new Employe("BORROTI MATIAS DANTAS", "Raphaël", "rborrotimatiasdantas4171@free.fr", "motDePasse", "0328178508", Genre.M);
-        Employe e3 = new Employe("OLMEADA MARAIS", "Nor", "nolmeadamarais1551@gmail.com", "motDePasse", "0418932546", Genre.F);
-        Employe e4 = new Employe("RAYES GEMEZ", "Olena", "orayesgemez5313@outlook.com", "motDePasse", "0532731620", Genre.F);
-        Employe e5 = new Employe("SING", "Ainhoa", "asing8183@free.fr", "motDePasse", "0705224200	", Genre.F);
-        Employe e6 = new Employe("ABDIULLINA", "David Alexander", "david-alexander.abdiullina@laposte.net", "motDePasse", "0590232772", Genre.M);
-        
-        ServiceUtilisateur su = new ServiceUtilisateur();
-        su.inscrire(e1);
-        su.inscrire(e2);
-        su.inscrire(e3);
-        su.inscrire(e4);
-        su.inscrire(e5);
-        su.inscrire(e6);
-        
-        // Hard-coded mediums
-        ServiceMedium sm = new ServiceMedium();
-        sm.setupMediums();
-    }
+    */
     
     public static void inscription() {
         printTitle("Inscription");
@@ -196,10 +192,9 @@ public class Main {
         
         System.out.println(consultation.toString());
         
-        // The employee's details are updated -- they have been given a new job.
-        employeChoisi.setTravailActuel(consultation.getId());
-        employeChoisi.setNoTravail(employeChoisi.getNoTravail()+1);
-        su.mettreAJour(employeChoisi);
+        // We keep track of the employee chosen by our algorithm for use
+        // in further demo functions.
+        EMPLOYE_CHOISI = employeChoisi;
         
         // The employee is notified about the new consultation
         sc.notifierEmploye(consultation);
@@ -207,72 +202,162 @@ public class Main {
     
     /*
     
-        The code used in the front end (client side) will resemble
-        the code used in these test functions
+        EMPLOYEE FUNCTIONS
     
     */
     
-    public static void testAuthentication() {
-        ServiceUtilisateur sa = new ServiceUtilisateur();
-        Client c = new Client("CLI", "ent", "cli@ent.mail", "passwrd", "0871234567", Genre.M, new Date(), "57 greenfield drive");        
-        Employe e = new Employe("EMP", "loye", "emp@loye.mail", "pass", "0871234567", Genre.F);
-        sa.inscrire(c);
-        sa.inscrire(e);
-        Client found = sa.rechercherClientParId(1L);
-        System.out.println(found.toString());
+    public static void connexionEmploye() {
+        printTitle("Connexion Employe");
+        // Data will be input on frontend
+        String mail = "alice.voyret@hotmail.com";
+        String mdp = "motDePasse";
+        
+        ServiceUtilisateur su = new ServiceUtilisateur();
+        Employe employe = su.authentifierEmploye(mail, mdp);
+        
+        System.out.println(employe.toString());
     }
     
-    public static void testConsultation() {
+    public static void chercherTravailActuel() {
+        printTitle("Chercher Travail Actuel");
+        
+        Employe employe = EMPLOYE_CHOISI;
+        
+        // We can use the travailActuel attribute of Employe to see if the employee
+        // has a job at the moment.
+        if(employe.getTravailActuel() == -1) {
+            System.out.println("\nPas de travail en ce moment!");
+        } else {
+            ServiceConsultation sc = new ServiceConsultation();
+            Consultation travailActuel = sc.rechercherConsultationParId(employe.getTravailActuel());
+            
+            System.out.println(travailActuel.toString());
+        } 
+    }
+    
+    public static void chercherHistoriqueConsultationsClient() {
+        printTitle("Chercher historique consultations");
+        
+        Employe employe = EMPLOYE_CHOISI;
         
         ServiceConsultation sc = new ServiceConsultation();
-        ServiceUtilisateur sa = new ServiceUtilisateur();
-        ServiceMedium sm = new ServiceMedium();
+        Consultation travailActuel = sc.rechercherConsultationParId(employe.getTravailActuel());
+        // We get all consultations associated with client travailActuel.getClient()
+        List<Consultation> historiqueConsultations = sc.listerHistoriqueConsultations(travailActuel.getClient());
         
-        // Here the client would be the currently logged in user
-        Client selectedClient = sa.rechercherClientParId(1L);
-        sm.setupMediums();
-        Medium chosenMedium = sm.listerMediums().get(0);
-
-        Employe employe = sa.choisirEmployePourTravail(chosenMedium);
-        Consultation consultation = new Consultation(employe, selectedClient, chosenMedium);
+        if(historiqueConsultations.size() > 1) {
+            for(Consultation c : historiqueConsultations) {
+                // We do not want to display the current consultation!
+                if(c.getId() != travailActuel.getId()) {
+                    System.out.println("\n" + c.toString());
+                }
+            }
+        } else {
+            System.out.println("\nAucune consultation antérieure");
+        }
         
-        System.out.println("Consultation: " + sc.creerConsultation(consultation));
+    }
+    
+    public static void commencerConsultation() {
+        printTitle("Commencer Consultation");
         
-        employe.setTravailActuel(consultation.getId());
-        employe.setNoTravail(employe.getNoTravail()+1);
-        sa.mettreAJour(employe);
+        Employe employe = EMPLOYE_CHOISI;
         
-        sc.notifierEmploye(consultation);
+        ServiceConsultation sc = new ServiceConsultation();
+        Consultation consultation = sc.rechercherConsultationParId(employe.getTravailActuel());
         
-        // This function will be called when the employe indicates
-        // that they're ready to start the consultation
-        sc.notifierClient(consultation);
-        
-        // These functions can be called to begin / end the consultation
         sc.commencerConsultation(consultation);
-        
-        // Example of auto-generated prediction
-        System.out.println(sc.genererPrediction(consultation, 1, 2, 3));
-        
-        System.out.println("Travail actuel during: " + consultation.getEmploye().getTravailActuel());
-        
-        sc.validerConsultation(consultation, "Consultation went great !");
-        
-        System.out.println("Travail actuel after: " + consultation.getEmploye().getTravailActuel());
-        
+        sc.notifierClient(consultation);
     }
     
-    public static void testHistoriqueClient() {
-        // Create more consultations to list
-        testConsultation();
-        testConsultation();
+    public static void chercherPredictions() {
+        printTitle("Chercher predictions");
+        
+        Employe employe = EMPLOYE_CHOISI;
         
         ServiceConsultation sc = new ServiceConsultation();
-        ServiceUtilisateur sa = new ServiceUtilisateur();
-        // Here the client would have been selected by the employee using the GUI
-        Client selectedClient = sa.rechercherClientParId(1L);
-        List<Consultation> historique = sc.listerHistoriqueConsultations(selectedClient);
+        Consultation consultation = sc.rechercherConsultationParId(employe.getTravailActuel());
         
-        System.out.println("\n\n Historique de consultations du client: " + historique);
+        String prediction = sc.genererPrediction(consultation, new Random().nextInt(4)+1, new Random().nextInt(4)+1, new Random().nextInt(4)+1);
+        System.out.println(prediction);
+    }
+    
+    public static void validerConsultation() {
+        printTitle("Valider consultation");
+        
+        Employe employe = EMPLOYE_CHOISI;
+        
+        ServiceConsultation sc = new ServiceConsultation();
+        Consultation consultation = sc.rechercherConsultationParId(employe.getTravailActuel());
+        
+        sc.validerConsultation(consultation, "La consultation s'est bien déroulée !");
+        
+        System.out.println(consultation.toString());
+    }
+    
+    public static void simulationConsultations(int nombreConsultations) {
+        printTitle("Simulation de " + nombreConsultations + " consultations");
+        System.out.println("--------------------------------------------------------------------------------------------------------");
+        System.out.printf ("%-6s%-16s%-24s%-16s%-8s\n", "ID", "Prénom employe", "Nom employe", "Genre employe", "Nombre de consultations faites par employe");
+        System.out.println("--------------------------------------------------------------------------------------------------------");
+        for(int i=0; i<nombreConsultations; i++) {
+            simulerConsultation();
+        }
+    }
+    
+    /*
+    
+        HELPER FUNCTIONS
+    
+    */
+    
+    public static void simulerConsultation() {
+        String mail = "moez.woagner@laposte.net";
+        String mdp = "password123";
+        ServiceUtilisateur su = new ServiceUtilisateur();
+        Client client = su.authentifierClient(mail, mdp);
+        ServiceConsultation sc = new ServiceConsultation();
+        ServiceMedium sm = new ServiceMedium();
+        List<Medium> mediumsDisponibles = sm.listerMediums();
+        Medium mediumChoisi = mediumsDisponibles.get(new Random().nextInt(mediumsDisponibles.size()));
+        Employe employeChoisi = su.choisirEmployePourTravail(mediumChoisi);
+        Consultation consultation = new Consultation(employeChoisi, client, mediumChoisi);
+        sc.creerConsultation(consultation);
+        sc.commencerConsultation(consultation);
+        sc.validerConsultation(consultation, "");
+        String genre = consultation.getEmploye().getGenre() == Genre.F ? "F" : "H";
+        System.out.printf ("%-6s%-16s%-24s%-16s%-8s\n", consultation.getId().toString(), consultation.getEmploye().getPrenom(), 
+                consultation.getEmploye().getNom(), genre, consultation.getEmploye().getNoTravail());
+        System.out.println("--------------------------------------------------------------------------------------------------------");
+        //System.out.println(consultation.getId() + "  : " + consultation.getEmploye().getPrenom() 
+        //        + " " + consultation.getEmploye().getNom() + ",                                " + (consultation.getEmploye().getGenre() == Genre.F ? "F" : "H") + ", "+ consultation.getEmploye().getNoTravail());
+    }
+    
+    public static void printTitle(String title) {
+        System.out.println("\n------------------------------------\n    " 
+                + title + "\n------------------------------------");
+
+    }
+    
+    public static void setupDB() {
+        // Hard-coded employes
+        Employe e1 = new Employe("VOYRET", "Alice", "alice.voyret@hotmail.com", "motDePasse", "0486856520", Genre.F);
+        Employe e2 = new Employe("BORROTI MATIAS DANTAS", "Raphaël", "rborrotimatiasdantas4171@free.fr", "motDePasse", "0328178508", Genre.M);
+        Employe e3 = new Employe("OLMEADA MARAIS", "Nor", "nolmeadamarais1551@gmail.com", "motDePasse", "0418932546", Genre.F);
+        Employe e4 = new Employe("RAYES GEMEZ", "Olena", "orayesgemez5313@outlook.com", "motDePasse", "0532731620", Genre.F);
+        Employe e5 = new Employe("SING", "Ainhoa", "asing8183@free.fr", "motDePasse", "0705224200", Genre.F);
+        Employe e6 = new Employe("ABDIULLINA", "David Alexander", "david-alexander.abdiullina@laposte.net", "motDePasse", "0590232772", Genre.M);
+        
+        ServiceUtilisateur su = new ServiceUtilisateur();
+        su.inscrire(e1);
+        su.inscrire(e2);
+        su.inscrire(e3);
+        su.inscrire(e4);
+        su.inscrire(e5);
+        su.inscrire(e6);
+        
+        // Hard-coded mediums
+        ServiceMedium sm = new ServiceMedium();
+        sm.setupMediums();
     }
 }

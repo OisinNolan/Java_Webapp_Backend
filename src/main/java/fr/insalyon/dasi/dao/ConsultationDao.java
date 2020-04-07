@@ -31,6 +31,11 @@ public class ConsultationDao {
         em.merge(consultation);
     }
     
+    public Consultation chercherParId(Long id) {
+        EntityManager em = JpaUtil.obtenirContextePersistance();
+        return em.find(Consultation.class, id); // renvoie null si l'identifiant n'existe pas
+    }
+    
     public List<Consultation> chercherParUtilisateur(Utilisateur utilisateur) {
         EntityManager em = JpaUtil.obtenirContextePersistance();
         TypedQuery<Consultation> query;
