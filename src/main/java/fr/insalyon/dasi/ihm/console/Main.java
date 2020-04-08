@@ -53,12 +53,13 @@ public class Main {
         chercherPredictions();
         validerConsultation();
         
-        // This function runs 100 simulated consultations and displays for each one
+        // This function runs X simulated consultations and displays for each one
         // the chosen employee along with their gender and the number of consultations
         // they have already done.
         //
         // This demonstrates our algorithm equally distributing the workload.
-        simulationConsultations(100);
+        int X = 100;
+        simulationConsultations(X);
         
         printTitle("Fin demo");
         
