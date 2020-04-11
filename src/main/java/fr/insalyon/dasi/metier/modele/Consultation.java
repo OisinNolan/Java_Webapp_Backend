@@ -35,9 +35,9 @@ public class Consultation implements Serializable {
     private String commentaire;
     
     //TODO: ManyToOne(mappedBy: "", cascade = CascadeType.the-right-type) p.24
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Employe employe;
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Client client;
     @ManyToOne()
     private Medium medium;
@@ -109,6 +109,11 @@ public class Consultation implements Serializable {
 
     public void setDateCreation(Date dateCreation) {
         this.dateCreation = dateCreation;
+    }
+
+    @Override
+    public String toString() {
+        return "Consultation{" + "id=" + id + ", dateCreation=" + dateCreation + ", debut=" + debut + ", fin=" + fin + ", commentaire=" + commentaire + ", employe=" + employe + ", client=" + client + ", medium=" + medium + '}';
     }
     
 }

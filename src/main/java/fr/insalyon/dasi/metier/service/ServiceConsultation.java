@@ -40,6 +40,10 @@ public class ServiceConsultation {
         try {
             JpaUtil.ouvrirTransaction();
             consultationDao.creer(consultation);
+            consultation.getClient().setIdConsultationActuel(consultation.getId());
+            consultation.getEmploye().setTravailActuel(consultation.getId());
+            consultation.getEmploye().setNoTravail(consultation.getEmploye().getNoTravail() + 1);
+            consultationDao.mettreAJour(consultation);
             JpaUtil.validerTransaction();
             resultat = consultation.getId();
             Logger.getAnonymousLogger().log(Level.FINE, "Consultation successfully persisted");
@@ -47,6 +51,21 @@ public class ServiceConsultation {
             Logger.getAnonymousLogger().log(Level.WARNING,
                     "Exception during call to creerConsultation() in ServiceConsultation", ex);
             JpaUtil.annulerTransaction();
+            resultat = null;
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        return resultat;
+    }
+    
+    public Consultation rechercherConsultationParId(Long id) {
+        Consultation resultat = null;
+        JpaUtil.creerContextePersistance();
+        try {
+            resultat = consultationDao.chercherParId(id);
+        } catch (Exception ex) {
+            Logger.getAnonymousLogger().log(Level.WARNING, 
+                    "Exception lors de l'appel au Service rechercherConsultationParId(id)", ex);
             resultat = null;
         } finally {
             JpaUtil.fermerContextePersistance();
@@ -82,6 +101,7 @@ public class ServiceConsultation {
             JpaUtil.ouvrirTransaction();
             consultation.setFin(new Date());
             consultation.setCommentaire(commentaire);
+            consultation.getEmploye().setTravailActuel(-1L);
             consultationDao.mettreAJour(consultation);
             JpaUtil.validerTransaction();
             resultat = consultation.getId();
@@ -122,7 +142,7 @@ public class ServiceConsultation {
         
         String message = "Bonjour " + employe.getPrenom() + ". Consultation requise pour "
                 + (client.getGenre() == Genre.F ? "Mme " : "M ") + client.getPrenom() + " "
-                + client.getNom().toUpperCase() + ".\nMédium ? incarner : " + medium.getDenomination();
+                + client.getNom().toUpperCase() + ".\nMï¿½dium ? incarner : " + medium.getDenomination();
         
         Message.envoyerNotification(employe.getNoTelephone(), message);
     }
@@ -135,9 +155,9 @@ public class ServiceConsultation {
         
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy ? HH'h'mm");
         
-        String message = "Bonjour " + client.getPrenom() + ". J’ai bien reçu votre demande de consultation du "
-                +  dateFormat.format(consultation.getDateCreation()) + ".\nVous pouvez d?s ? présent me contacter au " + employe.getNoTelephone()
-                + ". A tout de suite !\n\nMédiumiquement " + "vôtre, \n\n" + medium.getDenomination();
+        String message = "Bonjour " + client.getPrenom() + ". Jï¿½ai bien reï¿½u votre demande de consultation du "
+                +  dateFormat.format(consultation.getDateCreation()) + ".\nVous pouvez d?s ? prï¿½sent me contacter au " + employe.getNoTelephone()
+                + ". A tout de suite !\n\nMï¿½diumiquement " + "vï¿½tre, \n\n" + medium.getDenomination();
         
         Message.envoyerNotification(client.getNoTelephone(), message);
     }

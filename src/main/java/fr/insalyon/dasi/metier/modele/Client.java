@@ -25,6 +25,8 @@ public class Client extends Utilisateur{
     @JoinColumn(name = "profil_astral", referencedColumnName = "id")
     private ProfilAstral profilAstral;
     
+    private Long idConsultationActuel;
+    
     protected Client() {};
     
     public Client(String nom, String prenom, String mail, 
@@ -33,6 +35,7 @@ public class Client extends Utilisateur{
         super(nom, prenom, mail, motDePasse, noTelephone, genre);     
         this.dateNaissance = dateNaissance;
         this.adresse = adresse;
+        this.idConsultationActuel = -1L;
     }
 
     public Date getDateNaissance() {
@@ -58,5 +61,19 @@ public class Client extends Utilisateur{
     public void setProfilAstral(ProfilAstral profilAstral) {
         this.profilAstral = profilAstral;
     }
+
+    public Long getIdConsultationActuel() {
+        return idConsultationActuel;
+    }
+
+    public void setIdConsultationActuel(Long idConsultationActuel) {
+        this.idConsultationActuel = idConsultationActuel;
+    }
+
+    @Override
+    public String toString() {
+        return "Client{" + super.toString() + "dateNaissance=" + dateNaissance + ", adresse=" + adresse + ", profilAstral=" + profilAstral + ", idConsultationActuel=" + idConsultationActuel + '}';
+    }
+
     
 }

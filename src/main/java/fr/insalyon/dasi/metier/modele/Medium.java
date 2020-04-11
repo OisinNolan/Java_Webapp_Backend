@@ -72,4 +72,11 @@ public abstract class Medium {
     public void setPresentation(String presentation) {
         this.presentation = presentation;
     }
+
+    @Override
+    public String toString() {
+        return "id=" + id + ", denomination=" + denomination + ", genre=" + genre + ", presentation=" + presentation + ", ";
+    }
+    
+    
 }

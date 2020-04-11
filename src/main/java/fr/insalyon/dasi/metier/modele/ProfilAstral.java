@@ -87,5 +87,9 @@ public class ProfilAstral implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-    
+
+    @Override
+    public String toString() {
+        return "ProfilAstral{" + "id=" + id + ", signeZodiaque=" + signeZodiaque + ", signeChinois=" + signeChinois + ", couleur=" + couleur + ", animalTotem=" + animalTotem + ", client=" + client + '}';
+    }
 }

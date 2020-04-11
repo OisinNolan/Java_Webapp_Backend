@@ -20,8 +20,9 @@ import javax.persistence.OneToOne;
 public class Employe extends Utilisateur {
     
     private int noTravail;
-    @OneToOne
-    private Consultation travailActuel;
+    
+    // -1 if no current work
+    private Long travailActuel;
     
     protected Employe() {};
     
@@ -29,7 +30,7 @@ public class Employe extends Utilisateur {
                   String motDePasse, String noTelephone, Genre genre) {
         super(nom, prenom, mail, motDePasse, noTelephone, genre);
         this.noTravail = 0;
-        this.travailActuel = null;
+        this.travailActuel = -1L;
     }    
 
     public int getNoTravail() {
@@ -40,11 +41,18 @@ public class Employe extends Utilisateur {
         this.noTravail = noTravail;
     }
 
-    public Consultation getTravailActuel() {
+    public Long getTravailActuel() {
         return travailActuel;
     }
 
-    public void setTravailActuel(Consultation travailActuel) {
+    public void setTravailActuel(Long travailActuel) {
         this.travailActuel = travailActuel;
     }
+
+    @Override
+    public String toString() {
+        return "Employe{" + super.toString() + "noTravail=" + noTravail + ", travailActuel=" + travailActuel + '}';
+    }
+    
+    
 }

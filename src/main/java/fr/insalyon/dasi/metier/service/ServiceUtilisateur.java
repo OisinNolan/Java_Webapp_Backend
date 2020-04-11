@@ -13,6 +13,7 @@ import fr.insalyon.dasi.metier.modele.Medium;
 import fr.insalyon.dasi.metier.modele.ProfilAstral;
 import fr.insalyon.dasi.metier.modele.Utilisateur;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,7 +31,7 @@ public class ServiceUtilisateur {
 
     /* 
     
-        Fonctions pour Utilisateur Générique
+        Fonctions pour Utilisateur Gï¿½nï¿½rique
     
     */
     
@@ -55,14 +56,20 @@ public class ServiceUtilisateur {
             
             if(utilisateur instanceof Client) {
                 Client nouveauClient = (Client) utilisateur;
-                String objet = resultat == null ? "Bonjour " + nouveauClient.getPrenom() + ", votre inscription au service PREDICT’IF a malencontreusement échoué...\n"
-                        + "Merci de recommencer ultérieurement."
-                        : "Bonjour " + nouveauClient.getPrenom() + ", nous vous confirmons votre inscription au service PREDICT’IF."
+
+                Long idProfilAstral = this.creerProfilAstral(nouveauClient);
+                
+                boolean echec = (resultat == null || idProfilAstral == null );
+                
+                String objet = echec ? "Bonjour " + nouveauClient.getPrenom() + ", votre inscription au service PREDICTâ€™IF a malencontreusement Ã©chouÃ©...\n"
+                        + "Merci de recommencer ultÃ©rieurement."
+                        : "Bonjour " + nouveauClient.getPrenom() + ", nous vous confirmons votre inscription au service PREDICTâ€™IF."
                         + "\nRendez-vous vite sur notre site pour consulter votre profil astrologique et profiter des dons incroyables de nos mediums";
-                String corps = resultat == null ? "Echec de l’inscription chez PREDICT’IF" : "Bienvenue chez PREDICT’IF";
+
+                String corps = echec ? "Echec de lâ€™inscription chez PREDICTâ€™IF" : "Bienvenue chez PREDICTâ€™IF";
                 Message.envoyerMail("contact@predict.if", nouveauClient.getMail(), objet, corps);
 
-                this.creerProfilAstral(nouveauClient);
+                
             }
         }
         return resultat;
@@ -130,7 +137,7 @@ public class ServiceUtilisateur {
             // Recherche du client
             Client client = utilisateurDao.chercherClientParMail(mail);
             if (client != null) {
-                // Vérification du mot de passe
+                // Vï¿½rification du mot de passe
                 if (client.getMotDePasse().equals(motDePasse)) {
                     resultat = client;
                 }
@@ -193,7 +200,7 @@ public class ServiceUtilisateur {
             // Recherche du employe
             Employe employe = utilisateurDao.chercherEmployeParMail(mail);
             if (employe != null) {
-                // Vérification du mot de passe
+                // Vï¿½rification du mot de passe
                 if (employe.getMotDePasse().equals(motDePasse)) {
                     resultat = employe;
                 }
