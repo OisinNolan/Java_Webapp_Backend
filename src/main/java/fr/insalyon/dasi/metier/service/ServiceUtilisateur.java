@@ -31,7 +31,7 @@ public class ServiceUtilisateur {
 
     /* 
     
-        Fonctions pour Utilisateur G�n�rique
+        Fonctions pour Utilisateur Générique
     
     */
     
@@ -137,7 +137,7 @@ public class ServiceUtilisateur {
             // Recherche du client
             Client client = utilisateurDao.chercherClientParMail(mail);
             if (client != null) {
-                // V�rification du mot de passe
+                // Vérification du mot de passe
                 if (client.getMotDePasse().equals(motDePasse)) {
                     resultat = client;
                 }
@@ -200,7 +200,7 @@ public class ServiceUtilisateur {
             // Recherche du employe
             Employe employe = utilisateurDao.chercherEmployeParMail(mail);
             if (employe != null) {
-                // V�rification du mot de passe
+                // Vérification du mot de passe
                 if (employe.getMotDePasse().equals(motDePasse)) {
                     resultat = employe;
                 }

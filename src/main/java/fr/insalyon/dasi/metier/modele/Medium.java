@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  *
@@ -76,6 +77,32 @@ public abstract class Medium {
     @Override
     public String toString() {
         return "id=" + id + ", denomination=" + denomination + ", genre=" + genre + ", presentation=" + presentation + ", ";
+    }
+    
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
+            append(id).
+            append(denomination).
+            append(genre).
+            append(presentation).
+            toHashCode();
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+       if (!(obj instanceof Medium))
+            return false;
+        if (obj == this)
+            return true;
+
+        Medium rhs = (Medium) obj;
+        if (this.id.equals(rhs.id) &&
+                this.denomination.equals(rhs.denomination) &&
+                this.genre.equals(rhs.genre) &&
+                this.presentation.equals(rhs.presentation)
+                ) return true;
+        else return false;
     }
     
     

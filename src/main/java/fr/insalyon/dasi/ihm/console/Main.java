@@ -1,29 +1,27 @@
 package fr.insalyon.dasi.ihm.console;
 
-import fr.insalyon.dasi.util.Message;
 import fr.insalyon.dasi.dao.JpaUtil;
-import fr.insalyon.dasi.metier.modele.Astrologue;
-import fr.insalyon.dasi.metier.modele.Cartomancien;
 import fr.insalyon.dasi.metier.modele.Client;
 import fr.insalyon.dasi.metier.modele.Consultation;
 import fr.insalyon.dasi.metier.modele.Employe;
 import fr.insalyon.dasi.util.Genre;
 import fr.insalyon.dasi.metier.modele.Medium;
 import fr.insalyon.dasi.metier.modele.ProfilAstral;
-import fr.insalyon.dasi.metier.modele.Spirite;
+import fr.insalyon.dasi.metier.modele.Statistiques;
 import fr.insalyon.dasi.metier.service.ServiceUtilisateur;
 import fr.insalyon.dasi.metier.service.ServiceConsultation;
 import fr.insalyon.dasi.metier.service.ServiceMedium;
+import fr.insalyon.dasi.metier.service.ServiceStatistiques;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import jdk.incubator.http.internal.common.Utils;
 
 /**
  *
- * @author Oisin Nolan, Piotr Fr�tczak
+ * @author Oisin Nolan, Piotr Frątczak
  */
 public class Main {
 
@@ -61,6 +59,9 @@ public class Main {
         int X = 100;
         simulationConsultations(X);
         
+        // Display Statistics
+        testerStatistiques();
+        
         printTitle("Fin demo");
         
         JpaUtil.destroy();
@@ -93,6 +94,20 @@ public class Main {
         su.inscrire(client);
         
         System.out.println(client.toString());
+
+        // Second client
+        String nom2 = "DUNDER";
+        String prenom2 = "Phil";
+        String mail2 = "phil.dunder@laposte.net";
+        String mdp2 = "betterpassword123";
+        String tel2 = "0432205629";
+        Genre genre2 = Genre.M;
+        Date dateNaissance2 = new Date();
+        String adresse2 = "21 Rue des Fountaines, Bordeaux";
+        
+        Client client2 = new Client(nom2, prenom2, mail2, mdp2, tel2, genre2, dateNaissance2, adresse2);
+        su.inscrire(client2);
+        System.out.println(client2);
         
         // If we call inscrire() with a client whos email / id is already associated with
         // an entity on the database, the 'unique' constraint will fail an an exception will be thrown.
@@ -115,6 +130,8 @@ public class Main {
         Client client = su.authentifierClient(mail, mdp);
         
         System.out.println(client.toString());
+        
+        
         
 //      If we enter the wrong password, or an email that does not exist
 //      on the database, su.authentifierClient() simply returns null.
@@ -299,7 +316,7 @@ public class Main {
     public static void simulationConsultations(int nombreConsultations) {
         printTitle("Simulation de " + nombreConsultations + " consultations");
         System.out.println("--------------------------------------------------------------------------------------------------------");
-        System.out.printf ("%-6s%-16s%-24s%-16s%-8s\n", "ID", "Prénom employe", "Nom employe", "Genre employe", "Nombre de consultations faites par employe");
+        System.out.printf ("%-6s%-16s%-24s%-16s%-8s\n", "ID", "Prénom d'employé", "Nom d'employé", "Genre d'employé", "Nombre de consultations faites par employé");
         System.out.println("--------------------------------------------------------------------------------------------------------");
         for(int i=0; i<nombreConsultations; i++) {
             simulerConsultation();
@@ -360,5 +377,68 @@ public class Main {
         // Hard-coded mediums
         ServiceMedium sm = new ServiceMedium();
         sm.setupMediums();
+    }
+    
+    public static void testerStatistiques() {
+        ServiceStatistiques s = new ServiceStatistiques();
+        
+        System.out.println("\n\n" +
+                "\n------------------------------------------" +
+                "\nTop Cinque Médiums" +
+                "\n------------------------------------------");
+
+        System.out.printf("%-6s%-16s\n", "ID", "Denomination");
+        System.out.print("------------------------------------------\n");
+        for(Medium m : s.listerTopCinqueMediums()){
+            System.out.printf ("%-6s%-16s\n", m.getId().toString(), m.getDenomination());
+            System.out.println("------------------------------------------"); 
+        }
+        
+        
+        System.out.println("\n\n" +
+                "\n------------------------------------------" +
+                "\nNombre de consutations par Médium" +
+                "\n------------------------------------------");
+
+        System.out.printf("%-10s%-6s%-16s\n", "Nombre", "ID", "Denomination");
+        System.out.print("------------------------------------------\n");
+        Map<Medium, Integer> cons = s.listerNombreParMedium();
+        for(Medium m : cons.keySet()) {
+            String nb = cons.get(m).toString();
+            System.out.printf ("%-10s%-6s%-16s\n", nb, m.getId().toString(), m.getDenomination());
+            System.out.println("------------------------------------------"); 
+        }
+        
+        // Create another consultation to test the repartition
+        String mail = "phil.dunder@laposte.net";
+        String mdp = "betterpassword123";
+        ServiceUtilisateur su = new ServiceUtilisateur();
+        Client client = su.authentifierClient(mail, mdp);
+        ServiceConsultation sc = new ServiceConsultation();
+        ServiceMedium sm = new ServiceMedium();
+        List<Medium> mediumsDisponibles = sm.listerMediums();
+        Medium mediumChoisi = mediumsDisponibles.get(new Random().nextInt(mediumsDisponibles.size()));
+        Employe employeChoisi = su.choisirEmployePourTravail(mediumChoisi);
+        Consultation consultation = new Consultation(employeChoisi, client, mediumChoisi);
+        sc.creerConsultation(consultation);
+        sc.commencerConsultation(consultation);
+        sc.validerConsultation(consultation, "");
+        
+        System.out.println("\n\n" +
+                "\n------------------------------------------" +
+                "\nRépartition des clients parmi les employés" +
+                "\n------------------------------------------");
+
+        Map<Employe, List<Client>> repartition = s.listerRepartitionClients();
+        for(Employe e : repartition.keySet()) {
+            List<Client> clients = repartition.get(e);
+            System.out.printf ("%-16s%-16s\n", e.getNom(), e.getPrenom());
+            System.out.print("------------------------------------------\n");
+            for(Client c: clients){
+                System.out.printf ("\t%-16s%-16s\n", c.getNom(), c.getPrenom());
+                System.out.print("\t----------------------------------\n");
+            }
+        }
+        
     }
 }

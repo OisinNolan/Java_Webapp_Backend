@@ -105,6 +105,7 @@ public class ServiceConsultation {
             consultationDao.mettreAJour(consultation);
             JpaUtil.validerTransaction();
             resultat = consultation.getId();
+            //Add consultation to statistiques
             Statistiques.ajouterConsultation(consultation);
             Logger.getAnonymousLogger().log(Level.FINE, "Consultation successfully validated");
         } catch (Exception ex) {
@@ -142,7 +143,7 @@ public class ServiceConsultation {
         
         String message = "Bonjour " + employe.getPrenom() + ". Consultation requise pour "
                 + (client.getGenre() == Genre.F ? "Mme " : "M ") + client.getPrenom() + " "
-                + client.getNom().toUpperCase() + ".\nM�dium ? incarner : " + medium.getDenomination();
+                + client.getNom().toUpperCase() + ".\nMédium à incarner : " + medium.getDenomination();
         
         Message.envoyerNotification(employe.getNoTelephone(), message);
     }
@@ -153,11 +154,11 @@ public class ServiceConsultation {
         Client client = consultation.getClient();
         Medium medium = consultation.getMedium();
         
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy ? HH'h'mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy à HH'h'mm");
         
-        String message = "Bonjour " + client.getPrenom() + ". J�ai bien re�u votre demande de consultation du "
-                +  dateFormat.format(consultation.getDateCreation()) + ".\nVous pouvez d?s ? pr�sent me contacter au " + employe.getNoTelephone()
-                + ". A tout de suite !\n\nM�diumiquement " + "v�tre, \n\n" + medium.getDenomination();
+        String message = "Bonjour " + client.getPrenom() + ". J'ai bien reçu votre demande de consultation du "
+                +  dateFormat.format(consultation.getDateCreation()) + ".\nVous pouvez dès à présent me contacter au " + employe.getNoTelephone()
+                + ". A tout de suite !\n\nMédiumiquement vôtre, \n\n" + medium.getDenomination();
         
         Message.envoyerNotification(client.getNoTelephone(), message);
     }

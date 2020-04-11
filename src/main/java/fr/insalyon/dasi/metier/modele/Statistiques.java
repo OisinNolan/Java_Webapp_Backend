@@ -5,38 +5,26 @@
  */
 package fr.insalyon.dasi.metier.modele;
 
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.persistence.Entity;
-import javax.persistence.Id;
 
 /**
  *
  * @author pitf9
  */
-@Entity
-public class Statistiques implements Serializable {
+public class Statistiques {
     
-    @Id
-    private Long Id;
    
     // Mise à jour chaque fois une consultation finit
-    private static ArrayList<Consultation> consultations;
+    private static List<Consultation> consultations = new ArrayList<>();
     // Mise à jour chaque fois les statistiques sont calculées et persistées
-    private static Consultation dernierePersistee;
-    private static Map<Medium, Integer> consultationsParMediumMap;
-    private static Map<Employe, List<Client>> clientRepartitionMap;
-    private static List<Medium> topCinqueMediums;
+    private static Consultation derniereCalculee = null;
+    private static Map<Medium, Integer> consultationsParMediumMap = new HashMap<>();
+    private static Map<Employe, List<Client>> clientRepartitionMap = new HashMap<>();
+    private static List<Medium> topCinqueMediums = new ArrayList<>();
 
-    public Statistiques() {
-    }
-    
-    
-    public Long getId() {
-        return Id;
-    }
 
     public static Consultation getDerniereConsultation() {
         return consultations.get(consultations.size() - 1);
@@ -46,12 +34,12 @@ public class Statistiques implements Serializable {
         consultations.add(derniereConsultation);
     }
 
-    public static Consultation getDernierePersistee() {
-        return dernierePersistee;
+    public static Consultation getDerniereCalculee() {
+        return derniereCalculee;
     }
 
-    public static void setDernierePersistee(Consultation dernierePersistee) {
-        Statistiques.dernierePersistee = dernierePersistee;
+    public static void setDerniereCalculee(Consultation derniereCalculee) {
+        Statistiques.derniereCalculee = derniereCalculee;
     }
 
     public static Map<Medium, Integer> getConsultationsParMediumMap() {
@@ -83,10 +71,13 @@ public class Statistiques implements Serializable {
     }
     
     public static boolean miseAJour() {
-        return dernierePersistee!=null && dernierePersistee.equals(getDerniereConsultation());
+        return derniereCalculee!=null && derniereCalculee.equals(getDerniereConsultation());
     }
     
     public static int getNbConsultations() {
         return consultations.size();
+    }
+    
+    public Statistiques() {
     }
 }

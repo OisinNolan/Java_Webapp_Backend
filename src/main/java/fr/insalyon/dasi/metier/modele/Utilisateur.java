@@ -16,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  *
@@ -100,6 +101,39 @@ public abstract class Utilisateur  implements Serializable{
 
     @Override
     public String toString() {
-        return "id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", mail=" + mail + ", noTelephone=" + noTelephone + ", motDePasse=" + motDePasse + ", genre=" + genre + ", ";
+        return "id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", mail=" + mail + ", noTelephone=" + noTelephone + ", motDePasse=" + motDePasse + ", genre=" + genre;
+    }
+    
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
+            // if deriving: appendSuper(super.hashCode()).
+            append(id).
+            append(nom).
+            append(prenom).
+            append(mail).
+            append(noTelephone).
+            append(motDePasse).
+            append(genre).
+            toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+       if (!(obj instanceof Utilisateur))
+            return false;
+        if (obj == this)
+            return true;
+
+        Utilisateur rhs = (Utilisateur) obj;
+        if(this.id.equals(rhs.id) &&
+                this.nom.equals(rhs.nom) &&
+                this.prenom.equals(rhs.prenom) &&
+                this.mail.equals(rhs.mail) &&
+                this.noTelephone.equals(rhs.noTelephone) &&
+                this.motDePasse.equals(rhs.motDePasse) &&
+                this.genre.equals(rhs.genre))
+            return true;
+        else return false;
     }
 }
