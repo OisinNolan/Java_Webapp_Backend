@@ -7,17 +7,11 @@ import fr.insalyon.dasi.metier.modele.Employe;
 import fr.insalyon.dasi.util.Genre;
 import fr.insalyon.dasi.metier.modele.Medium;
 import fr.insalyon.dasi.metier.modele.ProfilAstral;
-import fr.insalyon.dasi.metier.modele.Statistiques;
-import fr.insalyon.dasi.metier.service.ServiceUtilisateur;
-import fr.insalyon.dasi.metier.service.ServiceConsultation;
-import fr.insalyon.dasi.metier.service.ServiceMedium;
-import fr.insalyon.dasi.metier.service.ServiceStatistiques;
-import java.util.ArrayList;
+import fr.insalyon.dasi.metier.service.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import jdk.incubator.http.internal.common.Utils;
 
 /**
  *
@@ -88,10 +82,10 @@ public class Main {
         
         Client client = new Client(nom, prenom, mail, mdp, tel, genre, dateNaissance, adresse);
         
-        ServiceUtilisateur su = new ServiceUtilisateur();
+        Service s = new Service();
         // We can use the same method inscrire() to register employees if needs be.
         // We will assume that the employees have already registered for this demo (Hard-coded).
-        su.inscrire(client);
+        s.inscrire(client);
         
         System.out.println(client.toString());
 
@@ -106,7 +100,7 @@ public class Main {
         String adresse2 = "21 Rue des Fountaines, Bordeaux";
         
         Client client2 = new Client(nom2, prenom2, mail2, mdp2, tel2, genre2, dateNaissance2, adresse2);
-        su.inscrire(client2);
+        s.inscrire(client2);
         System.out.println(client2);
         
         // If we call inscrire() with a client whos email / id is already associated with
@@ -126,8 +120,8 @@ public class Main {
         String mail = "moez.woagner@laposte.net";
         String mdp = "password123";
         
-        ServiceUtilisateur su = new ServiceUtilisateur();
-        Client client = su.authentifierClient(mail, mdp);
+        Service s = new Service();
+        Client client = s.authentifierClient(mail, mdp);
         
         System.out.println(client.toString());
         
@@ -138,13 +132,13 @@ public class Main {
 
         mail = "doesNot@exi.st";
         mdp = "password123";
-        Client client2 = su.authentifierClient(mail, mdp);
+        Client client2 = s.authentifierClient(mail, mdp);
         
         assert client2 == null;
         
         mail = "moez.woagner@laposte.net";
         mdp = "password124";
-        Client client3 = su.authentifierClient(mail, mdp);
+        Client client3 = s.authentifierClient(mail, mdp);
         
         assert client3 == null;
     }
@@ -156,8 +150,8 @@ public class Main {
         String mail = "moez.woagner@laposte.net";
         String mdp = "password123";
         
-        ServiceUtilisateur su = new ServiceUtilisateur();
-        Client client = su.authentifierClient(mail, mdp);
+        Service s = new Service();
+        Client client = s.authentifierClient(mail, mdp);
         
         // Profil astral is generated using the Astro API when the user is being registered
         ProfilAstral profilAstral = client.getProfilAstral();
@@ -167,12 +161,12 @@ public class Main {
     public static void chercherMediumsDisponibles() {
         printTitle("Chercher mediums disponibles");
         
-        ServiceMedium sm = new ServiceMedium();
+        Service s = new Service();
         // This function ensures that there is at least one employee of a given
         // gender available before displaying mediums of that gender
-        List<Medium> mediumsDisponibles = sm.listerMediums();
+        List<Medium> mediumsDisponibles = s.listerMediums();
         
-        Map<String, List<Medium>> typesMediums = sm.trierMediumsParType(mediumsDisponibles);
+        Map<String, List<Medium>> typesMediums = s.trierMediumsParType(mediumsDisponibles);
         
         for(String type : typesMediums.keySet()) {
             System.out.println("Mediums de type " + type + ":\n");
@@ -190,23 +184,21 @@ public class Main {
         String mail = "moez.woagner@laposte.net";
         String mdp = "password123";
         
-        ServiceUtilisateur su = new ServiceUtilisateur();
-        Client client = su.authentifierClient(mail, mdp);
+        Service s = new Service();
+        Client client = s.authentifierClient(mail, mdp);
         
-        ServiceConsultation sc = new ServiceConsultation();
-        ServiceMedium sm = new ServiceMedium();
         
         // The user navigates to the 'Mediums Disponibles' page and sees a list
         // of mediums
-        List<Medium> mediumsDisponibles = sm.listerMediums();
+        List<Medium> mediumsDisponibles = s.listerMediums();
         // The user chooses one of these mediums
         Medium mediumChoisi = mediumsDisponibles.get(new Random().nextInt(mediumsDisponibles.size()));
         // The ServiceUtilisateur chooses an employee to give this job based on the amount of
         // work that employee has done in the past, as well as their gender.
-        Employe employeChoisi = su.choisirEmployePourTravail(mediumChoisi);
+        Employe employeChoisi = s.choisirEmployePourTravail(mediumChoisi);
         
         Consultation consultation = new Consultation(employeChoisi, client, mediumChoisi);
-        sc.creerConsultation(consultation);
+        s.creerConsultation(consultation);
         
         System.out.println(consultation.toString());
         
@@ -215,7 +207,7 @@ public class Main {
         EMPLOYE_CHOISI = employeChoisi;
         
         // The employee is notified about the new consultation
-        sc.notifierEmploye(consultation);
+        s.notifierEmploye(consultation);
     }
     
     /*
@@ -230,8 +222,8 @@ public class Main {
         String mail = "alice.voyret@hotmail.com";
         String mdp = "motDePasse";
         
-        ServiceUtilisateur su = new ServiceUtilisateur();
-        Employe employe = su.authentifierEmploye(mail, mdp);
+        Service s = new Service();
+        Employe employe = s.authentifierEmploye(mail, mdp);
         
         System.out.println(employe.toString());
     }
@@ -246,8 +238,8 @@ public class Main {
         if(employe.getTravailActuel() == -1) {
             System.out.println("\nPas de travail en ce moment!");
         } else {
-            ServiceConsultation sc = new ServiceConsultation();
-            Consultation travailActuel = sc.rechercherConsultationParId(employe.getTravailActuel());
+            Service s = new Service();
+            Consultation travailActuel = s.rechercherConsultationParId(employe.getTravailActuel());
             
             System.out.println(travailActuel.toString());
         } 
@@ -258,10 +250,10 @@ public class Main {
         
         Employe employe = EMPLOYE_CHOISI;
         
-        ServiceConsultation sc = new ServiceConsultation();
-        Consultation travailActuel = sc.rechercherConsultationParId(employe.getTravailActuel());
+        Service s = new Service();
+        Consultation travailActuel = s.rechercherConsultationParId(employe.getTravailActuel());
         // We get all consultations associated with client travailActuel.getClient()
-        List<Consultation> historiqueConsultations = sc.listerHistoriqueConsultations(travailActuel.getClient());
+        List<Consultation> historiqueConsultations = s.listerHistoriqueConsultations(travailActuel.getClient());
         
         if(historiqueConsultations.size() > 1) {
             for(Consultation c : historiqueConsultations) {
@@ -281,11 +273,11 @@ public class Main {
         
         Employe employe = EMPLOYE_CHOISI;
         
-        ServiceConsultation sc = new ServiceConsultation();
-        Consultation consultation = sc.rechercherConsultationParId(employe.getTravailActuel());
+        Service s = new Service();
+        Consultation consultation = s.rechercherConsultationParId(employe.getTravailActuel());
         
-        sc.commencerConsultation(consultation);
-        sc.notifierClient(consultation);
+        s.commencerConsultation(consultation);
+        s.notifierClient(consultation);
     }
     
     public static void chercherPredictions() {
@@ -293,10 +285,10 @@ public class Main {
         
         Employe employe = EMPLOYE_CHOISI;
         
-        ServiceConsultation sc = new ServiceConsultation();
-        Consultation consultation = sc.rechercherConsultationParId(employe.getTravailActuel());
+        Service s = new Service();
+        Consultation consultation = s.rechercherConsultationParId(employe.getTravailActuel());
         
-        String prediction = sc.genererPrediction(consultation, new Random().nextInt(4)+1, new Random().nextInt(4)+1, new Random().nextInt(4)+1);
+        String prediction = s.genererPrediction(consultation, new Random().nextInt(4)+1, new Random().nextInt(4)+1, new Random().nextInt(4)+1);
         System.out.println(prediction);
     }
     
@@ -305,10 +297,10 @@ public class Main {
         
         Employe employe = EMPLOYE_CHOISI;
         
-        ServiceConsultation sc = new ServiceConsultation();
-        Consultation consultation = sc.rechercherConsultationParId(employe.getTravailActuel());
+        Service s = new Service();
+        Consultation consultation = s.rechercherConsultationParId(employe.getTravailActuel());
         
-        sc.validerConsultation(consultation, "La consultation s'est bien déroulée !");
+        s.validerConsultation(consultation, "La consultation s'est bien déroulée !");
         
         System.out.println(consultation.toString());
     }
@@ -332,17 +324,15 @@ public class Main {
     public static void simulerConsultation() {
         String mail = "moez.woagner@laposte.net";
         String mdp = "password123";
-        ServiceUtilisateur su = new ServiceUtilisateur();
-        Client client = su.authentifierClient(mail, mdp);
-        ServiceConsultation sc = new ServiceConsultation();
-        ServiceMedium sm = new ServiceMedium();
-        List<Medium> mediumsDisponibles = sm.listerMediums();
+        Service s = new Service();
+        Client client = s.authentifierClient(mail, mdp);
+        List<Medium> mediumsDisponibles = s.listerMediums();
         Medium mediumChoisi = mediumsDisponibles.get(new Random().nextInt(mediumsDisponibles.size()));
-        Employe employeChoisi = su.choisirEmployePourTravail(mediumChoisi);
+        Employe employeChoisi = s.choisirEmployePourTravail(mediumChoisi);
         Consultation consultation = new Consultation(employeChoisi, client, mediumChoisi);
-        sc.creerConsultation(consultation);
-        sc.commencerConsultation(consultation);
-        sc.validerConsultation(consultation, "");
+        s.creerConsultation(consultation);
+        s.commencerConsultation(consultation);
+        s.validerConsultation(consultation, "");
         String genre = consultation.getEmploye().getGenre() == Genre.F ? "F" : "H";
         System.out.printf ("%-6s%-16s%-24s%-16s%-8s\n", consultation.getId().toString(), consultation.getEmploye().getPrenom(), 
                 consultation.getEmploye().getNom(), genre, consultation.getEmploye().getNoTravail());
@@ -366,21 +356,20 @@ public class Main {
         Employe e5 = new Employe("SING", "Ainhoa", "asing8183@free.fr", "motDePasse", "0705224200", Genre.F);
         Employe e6 = new Employe("ABDIULLINA", "David Alexander", "david-alexander.abdiullina@laposte.net", "motDePasse", "0590232772", Genre.M);
         
-        ServiceUtilisateur su = new ServiceUtilisateur();
-        su.inscrire(e1);
-        su.inscrire(e2);
-        su.inscrire(e3);
-        su.inscrire(e4);
-        su.inscrire(e5);
-        su.inscrire(e6);
+        Service s = new Service();
+        s.inscrire(e1);
+        s.inscrire(e2);
+        s.inscrire(e3);
+        s.inscrire(e4);
+        s.inscrire(e5);
+        s.inscrire(e6);
         
         // Hard-coded mediums
-        ServiceMedium sm = new ServiceMedium();
-        sm.setupMediums();
+        s.setupMediums();
     }
     
     public static void testerStatistiques() {
-        ServiceStatistiques s = new ServiceStatistiques();
+        Service s = new Service();
         
         System.out.println("\n\n" +
                 "\n------------------------------------------" +
@@ -412,17 +401,14 @@ public class Main {
         // Create another consultation to test the repartition
         String mail = "phil.dunder@laposte.net";
         String mdp = "betterpassword123";
-        ServiceUtilisateur su = new ServiceUtilisateur();
-        Client client = su.authentifierClient(mail, mdp);
-        ServiceConsultation sc = new ServiceConsultation();
-        ServiceMedium sm = new ServiceMedium();
-        List<Medium> mediumsDisponibles = sm.listerMediums();
+        Client client = s.authentifierClient(mail, mdp);
+        List<Medium> mediumsDisponibles = s.listerMediums();
         Medium mediumChoisi = mediumsDisponibles.get(new Random().nextInt(mediumsDisponibles.size()));
-        Employe employeChoisi = su.choisirEmployePourTravail(mediumChoisi);
+        Employe employeChoisi = s.choisirEmployePourTravail(mediumChoisi);
         Consultation consultation = new Consultation(employeChoisi, client, mediumChoisi);
-        sc.creerConsultation(consultation);
-        sc.commencerConsultation(consultation);
-        sc.validerConsultation(consultation, "");
+        s.creerConsultation(consultation);
+        s.commencerConsultation(consultation);
+        s.validerConsultation(consultation, "");
         
         System.out.println("\n\n" +
                 "\n------------------------------------------" +
