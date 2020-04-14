@@ -104,6 +104,7 @@ public abstract class Utilisateur  implements Serializable{
         return "id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", mail=" + mail + ", noTelephone=" + noTelephone + ", motDePasse=" + motDePasse + ", genre=" + genre;
     }
     
+    // Overriden for the HashMap in Statistiques class
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
@@ -118,6 +119,7 @@ public abstract class Utilisateur  implements Serializable{
             toHashCode();
     }
 
+    // Overriden in order to properly compare while computing statistics
     @Override
     public boolean equals(Object obj) {
        if (!(obj instanceof Utilisateur))

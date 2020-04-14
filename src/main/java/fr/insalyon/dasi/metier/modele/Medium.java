@@ -79,6 +79,7 @@ public abstract class Medium {
         return "id=" + id + ", denomination=" + denomination + ", genre=" + genre + ", presentation=" + presentation + ", ";
     }
     
+    // Overriden for the HashMap in Statistiques class
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
@@ -89,6 +90,7 @@ public abstract class Medium {
             toHashCode();
     }
     
+    // Overriden in order to properly compare while computing statistics
     @Override
     public boolean equals(Object obj) {
        if (!(obj instanceof Medium))
