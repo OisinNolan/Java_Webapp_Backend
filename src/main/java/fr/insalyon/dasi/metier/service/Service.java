@@ -503,7 +503,7 @@ public class Service {
     
     // Statistics related services
     
-    private void calculerEtMettreAJour() {
+    private void calculerStatistiques() {
                 
         HashMap<Medium, Integer> consultationsParMedium =
                 (HashMap<Medium, Integer>) Statistiques.getConsultationsParMediumMap();
@@ -570,21 +570,21 @@ public class Service {
     
     public Map<Medium, Integer> listerNombreParMedium() {
         if (!Statistiques.miseAJour()) {
-            calculerEtMettreAJour();
+            calculerStatistiques();
         }
         return Statistiques.getConsultationsParMediumMap();
     }
     
     public Map<Employe, List<Client>> listerRepartitionClients() {
         if (!Statistiques.miseAJour()) {
-            calculerEtMettreAJour();
+            calculerStatistiques();
         }
         return Statistiques.getClientRepartitionMap();
     }
     
     public List<Medium> listerTopCinqueMediums() {
         if (!Statistiques.miseAJour()) {
-            calculerEtMettreAJour();
+            calculerStatistiques();
         }
         return Statistiques.getTopCinqueMediums();
     }
