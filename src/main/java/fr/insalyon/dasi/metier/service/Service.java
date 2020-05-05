@@ -70,9 +70,9 @@ public class Service {
             if(utilisateur instanceof Client) {
                 Client nouveauClient = (Client) utilisateur;
 
-                Long idProfilAstral = this.creerProfilAstral(nouveauClient);
+                ProfilAstral profilAstral = this.creerProfilAstral(nouveauClient);
                 
-                boolean echec = (resultat == null || idProfilAstral == null );
+                boolean echec = (resultat == null || profilAstral == null );
                 
                 String objet = echec ? "Bonjour " + nouveauClient.getPrenom() + ", votre inscription au service PREDICT’IF a malencontreusement échoué...\n"
                         + "Merci de recommencer ultérieurement."
@@ -166,8 +166,8 @@ public class Service {
     }
     
     
-    public Long creerProfilAstral(Client client) {
-        Long resultat = null;
+    public ProfilAstral creerProfilAstral(Client client) {
+        ProfilAstral resultat = null;
         
         AstroTest APIAstro = new AstroTest();
         
@@ -177,7 +177,7 @@ public class Service {
             ProfilAstral profilAstral = new ProfilAstral(reponseAPI.get(0), reponseAPI.get(1), reponseAPI.get(2), reponseAPI.get(3));
             client.setProfilAstral(profilAstral);
             this.mettreAJour(client);
-            resultat = profilAstral.getId();
+            resultat = profilAstral;
         } catch(IOException ex) {
             Logger.getAnonymousLogger().log(Level.WARNING, 
                     "IOException lors de l'appel au Service creerProfilAstral()", ex);
