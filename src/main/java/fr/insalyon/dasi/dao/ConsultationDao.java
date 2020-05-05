@@ -47,26 +47,4 @@ public class ConsultationDao {
         return query.setParameter("utilisateur", utilisateur).getResultList();
     }
     
-    public Map<Medium, Integer> listerNombreParMedium() {
-        EntityManager em = JpaUtil.obtenirContextePersistance();
-        TypedQuery<Medium> query = em.createQuery("SELECT c.medium FROM Consultation c GROUP BY c.medium", Medium.class);
-        List<Medium> mediums = query.getResultList();
-        
-        return null;
-    }
-    
-    public List<Medium> listerTopCinque() {
-        EntityManager em = JpaUtil.obtenirContextePersistance();
-        List<Integer> l = (List<Integer>) em.createQuery("SELECT c.MEDIUM_ID FROM Consultation c GROUP BY c.MEDIUM_ID").getResultList();
-        
-        return null;
-    }
-    
-    public Map<Employe, List<Client>> listerRepartitionClients() {
-        EntityManager em = JpaUtil.obtenirContextePersistance();
-        TypedQuery<Medium> query = em.createQuery("SELECT c.MEDIUM_ID FROM Consultation c GROUP BY c.MEDIUM_ID", Medium.class);
-        List<Medium> mediums = query.getResultList();
-        
-        return null;
-    }
 }

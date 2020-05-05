@@ -44,7 +44,7 @@ public class Service {
 
     /* 
     
-        Fonctions pour Utilisateur Générique
+        Services pour Utilisateur Générique
     
     */
     
@@ -125,7 +125,7 @@ public class Service {
     
     /* 
     
-        Fonctions pour Clients
+        Services pour Clients
     
     */
     
@@ -188,7 +188,7 @@ public class Service {
     
     /* 
     
-        Fonctions pour Employe
+        Services pour Employe
     
     */
     
@@ -243,7 +243,12 @@ public class Service {
         return resultat;
     }
     
-    // Consultation related Services
+    /* 
+    
+        Services pour Consultations
+    
+    */
+    
     protected ConsultationDao consultationDao = new ConsultationDao();
     
     public Long creerConsultation(Consultation consultation) {
@@ -331,7 +336,6 @@ public class Service {
         return resultat;
     }
     
-    // TODO update function signature in the docs
     public List<Consultation> listerHistoriqueConsultations(Client client) {
         List<Consultation> resultat = null;
         JpaUtil.creerContextePersistance();
@@ -391,7 +395,12 @@ public class Service {
         return prediction;
     }
     
-    // Médium related services
+    /* 
+    
+        Services pour Medium
+    
+    */
+    
     protected MediumDao mediumDao = new MediumDao();
     
     public boolean setupMediums() {
@@ -501,7 +510,11 @@ public class Service {
         return typesMediums;
     }
     
-    // Statistics related services
+    /* 
+    
+        Services Statistiques
+    
+    */
     
     private void calculerStatistiques() {
                 
