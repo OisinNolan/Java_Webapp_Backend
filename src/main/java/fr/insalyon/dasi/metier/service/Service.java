@@ -74,16 +74,32 @@ public class Service {
                 
                 boolean echec = (resultat == null || profilAstral == null );
                 
+                String corps = echec ? "Echec de l’inscription chez PREDICT’IF" : "Bienvenue chez PREDICT’IF";
+                
                 String objet = echec ? "Bonjour " + nouveauClient.getPrenom() + ", votre inscription au service PREDICT’IF a malencontreusement échoué...\n"
                         + "Merci de recommencer ultérieurement."
                         : "Bonjour " + nouveauClient.getPrenom() + ", nous vous confirmons votre inscription au service PREDICT’IF."
                         + "\nRendez-vous vite sur notre site pour consulter votre profil astrologique et profiter des dons incroyables de nos mediums";
 
-                String corps = echec ? "Echec de l’inscription chez PREDICT’IF" : "Bienvenue chez PREDICT’IF";
-                Message.envoyerMail("contact@predict.if", nouveauClient.getMail(), objet, corps);
-
-                
+                Message.envoyerMail("contact@predict.if", nouveauClient.getMail(), corps, objet);
+               
             }
+        }
+        return resultat;
+    }
+    
+    // Function to check whether an email address has been used already.
+    // This is called upon user registration to prevent duplicate key error.
+    public Client rechercherClientParMail(String mail) {
+        Client resultat = null;
+        JpaUtil.creerContextePersistance();
+        try {
+            resultat = utilisateurDao.chercherClientParMail(mail);
+        } catch (Exception ex) {
+            Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service rechercherUtilisateurParId(id)", ex);
+            resultat = null;
+        } finally {
+            JpaUtil.fermerContextePersistance();
         }
         return resultat;
     }
