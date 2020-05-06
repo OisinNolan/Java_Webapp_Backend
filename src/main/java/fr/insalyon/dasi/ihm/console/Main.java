@@ -28,7 +28,7 @@ public class Main {
         setupDB();
         
         // Demonstration of backend functionality
-        // Assertions used for demo, assertions must be enabled in VM options for this to work
+        // Some assertions used for demo, assertions must be enabled in VM options for this to work
         
         // CLIENT Functionality
         inscription();
