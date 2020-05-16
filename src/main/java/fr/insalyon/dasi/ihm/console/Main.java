@@ -193,9 +193,8 @@ public class Main {
         List<Medium> mediumsDisponibles = s.listerMediums();
         // The user chooses one of these mediums
         Medium mediumChoisi = mediumsDisponibles.get(new Random().nextInt(mediumsDisponibles.size()));
-        Long consultationId = s.demanderConsultation(client, mediumChoisi);
+        Consultation consultation = s.demanderConsultation(client, mediumChoisi);
        
-        Consultation consultation = s.rechercherConsultationParId(consultationId);
         System.out.println(consultation.toString());
         
         // We keep track of the employee chosen by our algorithm for use
@@ -322,9 +321,7 @@ public class Main {
         Client client = s.authentifierClient(mail, mdp);
         List<Medium> mediumsDisponibles = s.listerMediums();
         Medium mediumChoisi = mediumsDisponibles.get(new Random().nextInt(mediumsDisponibles.size()));
-        Employe employeChoisi = s.choisirEmployePourTravail(mediumChoisi);
-        Consultation consultation = new Consultation(employeChoisi, client, mediumChoisi);
-        s.creerConsultation(consultation);
+        Consultation consultation = s.demanderConsultation(client, mediumChoisi);
         s.commencerConsultation(consultation);
         s.validerConsultation(consultation, "");
         String genre = consultation.getEmploye().getGenre() == Genre.F ? "F" : "H";
@@ -398,9 +395,7 @@ public class Main {
         Client client = s.authentifierClient(mail, mdp);
         List<Medium> mediumsDisponibles = s.listerMediums();
         Medium mediumChoisi = mediumsDisponibles.get(new Random().nextInt(mediumsDisponibles.size()));
-        Employe employeChoisi = s.choisirEmployePourTravail(mediumChoisi);
-        Consultation consultation = new Consultation(employeChoisi, client, mediumChoisi);
-        s.creerConsultation(consultation);
+        Consultation consultation = s.demanderConsultation(client, mediumChoisi);
         s.commencerConsultation(consultation);
         s.validerConsultation(consultation, "");
         

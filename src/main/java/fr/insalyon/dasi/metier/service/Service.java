@@ -202,18 +202,18 @@ public class Service {
         return resultat;
     }
     
-    public Long demanderConsultation(Client client, Medium medium) {
+    public Consultation demanderConsultation(Client client, Medium medium) {
         // The Service chooses an employee to give this job based on the amount of
         // work that employee has done in the past, as well as their gender.
         Employe employe = choisirEmployePourTravail(medium);
         
         Consultation consultation = new Consultation(employe, client, medium);
-        Long consultationId = creerConsultation(consultation);
+        if (creerConsultation(consultation) == null) return null;
         
         // The employee is notified about the new consultation
         notifierEmploye(consultation);
         
-        return consultationId;
+        return consultation;
     }
     
     private Employe choisirEmployePourTravail(Medium medium){
