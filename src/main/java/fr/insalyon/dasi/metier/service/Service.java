@@ -202,6 +202,21 @@ public class Service {
         return resultat;
     }
     
+    public Consultation getConsultationEnCours(Client client) {
+        Long consultationId = client.getIdConsultationActuel();
+        if (consultationId.equals(-1L)) return null;
+        
+        return rechercherConsultationParId(consultationId);
+    }
+    
+    public Long getMediumConsultationEnCours(Client client) {
+        Long consultationId = client.getIdConsultationActuel();
+        if (consultationId.equals(-1L)) return -1L;
+        
+        Consultation enCours = rechercherConsultationParId(consultationId);
+        return enCours.getMedium().getId();
+    }
+    
     /* 
     
         Services pour Employe
@@ -453,7 +468,7 @@ public class Service {
         return resultat;
     }
     
-    public Medium rechercherParId(Long id) {
+    public Medium rechercherMediumParId(Long id) {
         Medium resultat = null;
         JpaUtil.creerContextePersistance();
         try {
@@ -467,7 +482,7 @@ public class Service {
         return resultat;
     }
     
-    public Medium rechercherParDenomination(String denomination) {
+    public Medium rechercherParMediumDenomination(String denomination) {
         Medium resultat = null;
         JpaUtil.creerContextePersistance();
         try {
