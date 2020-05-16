@@ -284,6 +284,7 @@ public class Service {
     
     public Long getMediumConsultationEnCours(Utilisateur utilisateur) {
         Consultation enCours = getConsultationEnCours(utilisateur);
+        if (enCours == null) return -1L; // aucune consultation en cours
         return enCours.getMedium().getId();
     }
     
