@@ -193,21 +193,15 @@ public class Main {
         List<Medium> mediumsDisponibles = s.listerMediums();
         // The user chooses one of these mediums
         Medium mediumChoisi = mediumsDisponibles.get(new Random().nextInt(mediumsDisponibles.size()));
-        // The ServiceUtilisateur chooses an employee to give this job based on the amount of
-        // work that employee has done in the past, as well as their gender.
-        Employe employeChoisi = s.choisirEmployePourTravail(mediumChoisi);
-        
-        Consultation consultation = new Consultation(employeChoisi, client, mediumChoisi);
-        s.creerConsultation(consultation);
-        
+        Long consultationId = s.demanderConsultation(client, mediumChoisi);
+       
+        Consultation consultation = s.rechercherConsultationParId(consultationId);
         System.out.println(consultation.toString());
         
         // We keep track of the employee chosen by our algorithm for use
         // in further demo functions.
-        EMPLOYE_CHOISI = employeChoisi;
+        EMPLOYE_CHOISI = consultation.getEmploye();
         
-        // The employee is notified about the new consultation
-        s.notifierEmploye(consultation);
     }
     
     /*

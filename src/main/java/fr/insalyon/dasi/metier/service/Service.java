@@ -202,6 +202,72 @@ public class Service {
         return resultat;
     }
     
+    public Long demanderConsultation(Client client, Medium medium) {
+        // The Service chooses an employee to give this job based on the amount of
+        // work that employee has done in the past, as well as their gender.
+        Employe employe = choisirEmployePourTravail(medium);
+        
+        Consultation consultation = new Consultation(employe, client, medium);
+        Long consultationId = creerConsultation(consultation);
+        
+        // The employee is notified about the new consultation
+        notifierEmploye(consultation);
+        
+        return consultationId;
+    }
+    
+    private Employe choisirEmployePourTravail(Medium medium){
+        Employe resultat = null;
+        JpaUtil.creerContextePersistance();
+        try {
+            resultat = utilisateurDao.choisirParGenre(medium.getGenre());
+        } catch (Exception ex) {
+            Logger.getAnonymousLogger().log(Level.WARNING, 
+                    "Exception lors de l'appel au Service choisirEmploye(Medium)", ex);
+            resultat = null;
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        return resultat;
+    }
+    
+    private Long creerConsultation(Consultation consultation) {
+        Long resultat = null;
+        JpaUtil.creerContextePersistance();
+        try {
+            JpaUtil.ouvrirTransaction();
+            consultationDao.creer(consultation);
+            consultation.getClient().setIdConsultationActuel(consultation.getId());
+            consultation.getEmploye().setTravailActuel(consultation.getId());
+            consultation.getEmploye().setNoTravail(consultation.getEmploye().getNoTravail() + 1);
+            consultationDao.mettreAJour(consultation);
+            JpaUtil.validerTransaction();
+            resultat = consultation.getId();
+            Logger.getAnonymousLogger().log(Level.FINE, "Consultation successfully persisted");
+        } catch (Exception ex) {
+            Logger.getAnonymousLogger().log(Level.WARNING,
+                    "Exception during call to creerConsultation() in ServiceConsultation", ex);
+            JpaUtil.annulerTransaction();
+            resultat = null;
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+        return resultat;
+    }
+    
+    private void notifierEmploye(Consultation consultation) {
+        
+        Employe employe = consultation.getEmploye();
+        Client client = consultation.getClient();
+        Medium medium = consultation.getMedium();
+        
+        String message = "Bonjour " + employe.getPrenom() + ". Consultation requise pour "
+                + (client.getGenre() == Genre.F ? "Mme " : "M ") + client.getPrenom() + " "
+                + client.getNom().toUpperCase() + ".\nMédium à incarner : " + medium.getDenomination();
+        
+        Message.envoyerNotification(employe.getNoTelephone(), message);
+    }
+    
     public Consultation getConsultationEnCours(Client client) {
         Long consultationId = client.getIdConsultationActuel();
         if (consultationId.equals(-1L)) return null;
@@ -259,21 +325,6 @@ public class Service {
         return resultat;
     }
     
-    public Employe choisirEmployePourTravail(Medium medium){
-        Employe resultat = null;
-        JpaUtil.creerContextePersistance();
-        try {
-            resultat = utilisateurDao.choisirParGenre(medium.getGenre());
-        } catch (Exception ex) {
-            Logger.getAnonymousLogger().log(Level.WARNING, 
-                    "Exception lors de l'appel au Service choisirEmploye(Medium)", ex);
-            resultat = null;
-        } finally {
-            JpaUtil.fermerContextePersistance();
-        }
-        return resultat;
-    }
-    
     /* 
     
         Services pour Consultations
@@ -281,30 +332,6 @@ public class Service {
     */
     
     protected ConsultationDao consultationDao = new ConsultationDao();
-    
-    public Long creerConsultation(Consultation consultation) {
-        Long resultat = null;
-        JpaUtil.creerContextePersistance();
-        try {
-            JpaUtil.ouvrirTransaction();
-            consultationDao.creer(consultation);
-            consultation.getClient().setIdConsultationActuel(consultation.getId());
-            consultation.getEmploye().setTravailActuel(consultation.getId());
-            consultation.getEmploye().setNoTravail(consultation.getEmploye().getNoTravail() + 1);
-            consultationDao.mettreAJour(consultation);
-            JpaUtil.validerTransaction();
-            resultat = consultation.getId();
-            Logger.getAnonymousLogger().log(Level.FINE, "Consultation successfully persisted");
-        } catch (Exception ex) {
-            Logger.getAnonymousLogger().log(Level.WARNING,
-                    "Exception during call to creerConsultation() in ServiceConsultation", ex);
-            JpaUtil.annulerTransaction();
-            resultat = null;
-        } finally {
-            JpaUtil.fermerContextePersistance();
-        }
-        return resultat;
-    }
     
     public Consultation rechercherConsultationParId(Long id) {
         Consultation resultat = null;
@@ -380,19 +407,6 @@ public class Service {
             JpaUtil.fermerContextePersistance();
         }
         return resultat;
-    }
-    
-    public void notifierEmploye(Consultation consultation) {
-        
-        Employe employe = consultation.getEmploye();
-        Client client = consultation.getClient();
-        Medium medium = consultation.getMedium();
-        
-        String message = "Bonjour " + employe.getPrenom() + ". Consultation requise pour "
-                + (client.getGenre() == Genre.F ? "Mme " : "M ") + client.getPrenom() + " "
-                + client.getNom().toUpperCase() + ".\nMédium à incarner : " + medium.getDenomination();
-        
-        Message.envoyerNotification(employe.getNoTelephone(), message);
     }
     
     public void notifierClient(Consultation consultation) {
