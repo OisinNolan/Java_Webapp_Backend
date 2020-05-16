@@ -268,18 +268,22 @@ public class Service {
         Message.envoyerNotification(employe.getNoTelephone(), message);
     }
     
-    public Consultation getConsultationEnCours(Client client) {
-        Long consultationId = client.getIdConsultationActuel();
+    public Consultation getConsultationEnCours(Utilisateur utilisateur) {
+        Long consultationId;
+        
+        if (utilisateur instanceof Client) {
+            consultationId = ((Client)utilisateur).getIdConsultationActuel();
+        } else if (utilisateur instanceof Employe) {
+            consultationId = ((Employe)utilisateur).getTravailActuel();
+        } else return null;
+        
         if (consultationId.equals(-1L)) return null;
         
         return rechercherConsultationParId(consultationId);
     }
     
-    public Long getMediumConsultationEnCours(Client client) {
-        Long consultationId = client.getIdConsultationActuel();
-        if (consultationId.equals(-1L)) return -1L;
-        
-        Consultation enCours = rechercherConsultationParId(consultationId);
+    public Long getMediumConsultationEnCours(Utilisateur utilisateur) {
+        Consultation enCours = getConsultationEnCours(utilisateur);
         return enCours.getMedium().getId();
     }
     
