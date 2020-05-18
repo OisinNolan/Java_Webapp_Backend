@@ -7,6 +7,7 @@ import fr.insalyon.dasi.metier.modele.Employe;
 import fr.insalyon.dasi.util.Genre;
 import fr.insalyon.dasi.metier.modele.Medium;
 import fr.insalyon.dasi.metier.modele.ProfilAstral;
+import fr.insalyon.dasi.metier.modele.Statistiques;
 import fr.insalyon.dasi.metier.service.Service;
 import java.util.Date;
 import java.util.List;

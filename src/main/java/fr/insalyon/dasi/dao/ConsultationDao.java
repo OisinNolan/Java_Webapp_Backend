@@ -36,6 +36,13 @@ public class ConsultationDao {
         return em.find(Consultation.class, id); // renvoie null si l'identifiant n'existe pas
     }
     
+    public List<Consultation> getConsultations() {
+        EntityManager em = JpaUtil.obtenirContextePersistance();
+        TypedQuery<Consultation> query;
+        query = em.createQuery("SELECT c FROM Consultation c", Consultation.class);
+        return query.getResultList();
+    }
+    
     public List<Consultation> chercherParUtilisateur(Utilisateur utilisateur) {
         EntityManager em = JpaUtil.obtenirContextePersistance();
         TypedQuery<Consultation> query;

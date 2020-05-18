@@ -575,6 +575,19 @@ public class Service {
     
     */
     
+    public void chargerConsultationsStatistiques() {
+        JpaUtil.creerContextePersistance();
+        try {
+            List<Consultation> consultations = consultationDao.getConsultations();
+            Statistiques.setConsultations(consultations);
+        } catch (Exception ex) {
+            Logger.getAnonymousLogger().log(Level.WARNING, "Exception lors de l'appel au Service listerMediums()", ex);
+
+        } finally {
+            JpaUtil.fermerContextePersistance();
+        }
+    }
+    
     private void calculerStatistiques() {
                 
         HashMap<Medium, Integer> consultationsParMedium =
@@ -590,6 +603,7 @@ public class Service {
             // Get the index of the last calculated consultation
             prochainIndex = Statistiques.getConsultations().indexOf(derniere)+1;
         }
+        
         // Get the list of not yet calculated consultations
         List<Consultation> aCalculer = Statistiques.getConsultations().subList(prochainIndex, Statistiques.getNbConsultations());
         
@@ -617,8 +631,11 @@ public class Service {
         
         // Updating top 5 mediums
         ArrayList<Medium> allMediums = new ArrayList<>();
-        allMediums.addAll(listerMediums());
+        JpaUtil.creerContextePersistance();
+        allMediums.addAll(mediumDao.listerMediums());
+        JpaUtil.fermerContextePersistance();
         ArrayList<Integer> vals = new ArrayList<>();
+        
         for(Medium m : allMediums){
             Integer i = consultationsParMedium.get(m);
             vals.add(i);

@@ -70,6 +70,10 @@ public class Statistiques {
         return consultations;
     }
     
+    public static void setConsultations(List<Consultation> consultations) {
+        Statistiques.consultations = consultations;
+    }
+    
     public static boolean miseAJour() {
         return derniereCalculee!=null && derniereCalculee.equals(getDerniereConsultation());
     }
