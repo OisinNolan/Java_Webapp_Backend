@@ -589,7 +589,12 @@ public class Service {
     }
     
     private void calculerStatistiques() {
-                
+        
+        if(!Statistiques.getCharge()) {
+            chargerConsultationsStatistiques();
+            Statistiques.setCharge(true);
+        }
+        
         HashMap<Medium, Integer> consultationsParMedium =
                 (HashMap<Medium, Integer>) Statistiques.getConsultationsParMediumMap();
         HashMap<Employe, List<Client>> repartition = 

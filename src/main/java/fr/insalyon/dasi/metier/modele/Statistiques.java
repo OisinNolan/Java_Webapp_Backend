@@ -24,8 +24,16 @@ public class Statistiques {
     private static Map<Medium, Integer> consultationsParMediumMap = new HashMap<>();
     private static Map<Employe, List<Client>> clientRepartitionMap = new HashMap<>();
     private static List<Medium> topCinqueMediums = new ArrayList<>();
+    private static boolean charge = false;
 
-
+    public static boolean getCharge() {
+        return charge;
+    }
+    
+    public static void setCharge(boolean charge) {
+        Statistiques.charge = charge;
+    }
+    
     public static Consultation getDerniereConsultation() {
         return consultations.get(consultations.size() - 1);
     }

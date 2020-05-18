@@ -25,7 +25,7 @@ public class Main {
     public static void main(String[] args) {
 
         JpaUtil.init();
-        
+        /*
         setupDB();
         
         // Demonstration of backend functionality
@@ -57,7 +57,11 @@ public class Main {
         // Display Statistics
         testerStatistiques();
         
-        printTitle("Fin demo");
+        printTitle("Fin demo");*/
+        
+        testerStatistiques();
+        testerStatistiques();
+        
         
         JpaUtil.destroy();
         
