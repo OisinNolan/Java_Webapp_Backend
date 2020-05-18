@@ -529,12 +529,14 @@ public class Service {
             // This code ensures that mediums of a certain gender
             // are only shown in the case that there is one of more 
             // employees of that gender currently available
-            long noHommes = utilisateurDao.nombreEmployesHommeDisponible();
-            long noFemmes = utilisateurDao.nombreEmployesFemmeDisponible();
+            long nbHommes = utilisateurDao.nombreEmployesHommeDisponible();
+            long nbFemmes = utilisateurDao.nombreEmployesFemmeDisponible();
             
-            if(noHommes == 0) {
+            if (nbHommes == 0 && nbFemmes ==0) {
+                return null;
+            } else if (nbHommes == 0) {
                 resultat = mediumDao.listerMediumsDeGenre(Genre.F);
-            } else if(noFemmes == 0) {
+            } else if (nbFemmes == 0) {
                 resultat = mediumDao.listerMediumsDeGenre(Genre.M);
             } else {
                 resultat = mediumDao.listerMediums();
