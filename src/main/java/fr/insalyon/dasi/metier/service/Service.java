@@ -404,6 +404,12 @@ public class Service {
         JpaUtil.creerContextePersistance();
         try {
             resultat = consultationDao.chercherParUtilisateur(client);
+            // Si la derniere consultation n'est pas finie,
+            // on veut pas la garder dans la historique
+            Consultation c = resultat.get(resultat.size()-1);
+            if (c.getFin() == null) {
+                resultat.remove(resultat.size()-1);
+            }
         } catch (Exception ex) {
             Logger.getAnonymousLogger().log(Level.WARNING,
                     "Exception lors de l'appel au Service listerHistoriqueConsultations()", ex);
