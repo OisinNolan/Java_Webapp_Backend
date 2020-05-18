@@ -583,15 +583,15 @@ public class Service {
                 (HashMap<Employe, List<Client>>) Statistiques.getClientRepartitionMap();
         
         Consultation derniere = Statistiques.getDerniereCalculee();
-        int derniereIndex;
+        int prochainIndex;
         if (derniere == null) {
-            derniereIndex = 0;
+            prochainIndex = 0;
         } else {
             // Get the index of the last calculated consultation
-            derniereIndex = Statistiques.getConsultations().indexOf(derniere);
+            prochainIndex = Statistiques.getConsultations().indexOf(derniere)+1;
         }
         // Get the list of not yet calculated consultations
-        List<Consultation> aCalculer = Statistiques.getConsultations().subList(derniereIndex+1, Statistiques.getNbConsultations());
+        List<Consultation> aCalculer = Statistiques.getConsultations().subList(prochainIndex, Statistiques.getNbConsultations());
         
         for (Consultation c : aCalculer) {
             // Collecting data to store number of consultations per Meduim
