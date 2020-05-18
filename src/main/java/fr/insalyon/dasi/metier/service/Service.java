@@ -382,6 +382,7 @@ public class Service {
             consultation.setFin(new Date());
             consultation.setCommentaire(commentaire);
             consultation.getEmploye().setTravailActuel(-1L);
+            consultation.getClient().setIdConsultationActuel(-1L);
             consultationDao.mettreAJour(consultation);
             JpaUtil.validerTransaction();
             resultat = consultation.getId();
